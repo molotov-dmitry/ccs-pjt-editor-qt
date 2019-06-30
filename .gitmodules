@@ -1,0 +1,3 @@
+[submodule "parser"]
+	path = parser
+	url = https://github.com/molotov-dmitry/ccs-pjt-parser.git
