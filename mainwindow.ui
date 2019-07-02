@@ -14,10 +14,87 @@
    <string>Project Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="cpu"/>
+   <iconset theme="cpu">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QComboBox" name="boxProjects"/>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="boxConfigurations"/>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonConfigurationAdd">
+         <property name="icon">
+          <iconset theme="add">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonConfigurationRename">
+         <property name="icon">
+          <iconset theme="edit-rename">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonConfigurationCopy">
+         <property name="icon">
+          <iconset theme="edit-copy">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="buttonConfigurationRemove">
+         <property name="icon">
+          <iconset theme="remove">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>723</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
@@ -35,103 +112,432 @@
       </widget>
       <widget class="QStackedWidget" name="stackedWidget">
        <widget class="QWidget" name="pageProjectSettings">
-        <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Project type:</string>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QTabWidget" name="tabProjectSettings">
+           <property name="currentIndex">
+            <number>2</number>
            </property>
+           <widget class="QWidget" name="tab">
+            <attribute name="title">
+             <string>General options</string>
+            </attribute>
+            <layout class="QFormLayout" name="formLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Project type:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="boxProjectType">
+               <item>
+                <property name="text">
+                 <string>&lt;Unset&gt;</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Executable</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Library</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>CPU family:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="editCpuFamily">
+               <property name="editable">
+                <bool>true</bool>
+               </property>
+               <property name="currentText">
+                <string>TMS320C28XX</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>TMS320C28XX</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>TMS320C54XX</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>TMS320C55XX</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>TMS320C62XX</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>TMS320C64XX</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>TMS320C67XX</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>Build steps</string>
+            </attribute>
+            <layout class="QFormLayout" name="formLayout_3">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Pre-build steps:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QTreeWidget" name="treePreBuildSteps">
+               <column>
+                <property name="text">
+                 <string>Command</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Condition</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Post-build steps:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QTreeWidget" name="treePostBuildSteps">
+               <column>
+                <property name="text">
+                 <string>Command</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Condition</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="title">
+             <string>Compiler options</string>
+            </attribute>
+            <layout class="QFormLayout" name="formLayout_4">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Include paths:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QLineEdit" name="editCompilerIncludePaths"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton">
+                 <property name="icon">
+                  <iconset theme="document-edit">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Defines:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QLineEdit" name="editCompilerDefines"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton_2">
+                 <property name="icon">
+                  <iconset theme="document-edit">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Undefines:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QLineEdit" name="editCompilerUndefines"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton_3">
+                 <property name="icon">
+                  <iconset theme="document-edit">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="checkFullSymbolicDebug">
+               <property name="toolTip">
+                <string>Full symbolic debug</string>
+               </property>
+               <property name="text">
+                <string>Full symbolic debug</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QCheckBox" name="checkDataAccessModel">
+               <property name="text">
+                <string>Data access model:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QComboBox" name="editCompilerDataAccessModel">
+               <property name="editable">
+                <bool>true</bool>
+               </property>
+               <item>
+                <property name="text">
+                 <string>far</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>far_aggregates</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>near</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QCheckBox" name="checkMh">
+               <property name="toolTip">
+                <string>Specify speculative load byte count threshold</string>
+               </property>
+               <property name="text">
+                <string>mh:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QSpinBox" name="editMh"/>
+             </item>
+             <item row="7" column="0">
+              <widget class="QCheckBox" name="checkMi">
+               <property name="toolTip">
+                <string>Specify maximum cycles that interrupts may be disabled</string>
+               </property>
+               <property name="text">
+                <string>mi:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QSpinBox" name="editMi"/>
+             </item>
+             <item row="8" column="0">
+              <widget class="QCheckBox" name="checkMv">
+               <property name="toolTip">
+                <string>Target processor version</string>
+               </property>
+               <property name="text">
+                <string>mv</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1">
+              <widget class="QComboBox" name="editMv">
+               <property name="editable">
+                <bool>true</bool>
+               </property>
+               <item>
+                <property name="text">
+                 <string>6200</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>6400</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>6400+</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="10" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Other options:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="10" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QLineEdit" name="editCompilerOtherOptions"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton_4">
+                 <property name="icon">
+                  <iconset theme="document-edit">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_4">
+            <attribute name="title">
+             <string>Linker options</string>
+            </attribute>
+            <layout class="QFormLayout" name="formLayout_2">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="checkLinkerAbsoluteExecutable">
+               <property name="toolTip">
+                <string>Produce an absolute, executable object file</string>
+               </property>
+               <property name="text">
+                <string>Absolute executable</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkLinkerRomAutoinitModel">
+               <property name="toolTip">
+                <string>Link using ROM autoinitialization model</string>
+               </property>
+               <property name="text">
+                <string>ROM autoinit model</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="checkLinkerUnspecifiedSectionsWarning">
+               <property name="toolTip">
+                <string>Warn if an unspecified output section is created</string>
+               </property>
+               <property name="text">
+                <string>Unspecified section warning</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="checkLinkerRereadLibraries">
+               <property name="toolTip">
+                <string>Reread libraries; resolve backward references</string>
+               </property>
+               <property name="text">
+                <string>Reread libraries</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>Other options:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QLineEdit" name="editLinkerOtherOptions"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton_5">
+                 <property name="icon">
+                  <iconset theme="document-edit">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_5">
+            <attribute name="title">
+             <string>Archiver options</string>
+            </attribute>
+            <layout class="QFormLayout" name="formLayout_5">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Other options:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QLineEdit" name="editArchiverOtherOptions"/>
+               </item>
+               <item>
+                <widget class="QToolButton" name="toolButton_6">
+                 <property name="icon">
+                  <iconset theme="document-edit">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="comboBox">
-           <item>
-            <property name="text">
-             <string>Executable</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Library</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>CPU family:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Configurations:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="1" column="1">
-            <widget class="QToolButton" name="toolButton_2">
-             <property name="toolTip">
-              <string>Copy configuration</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset theme="edit-copy"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QToolButton" name="toolButton">
-             <property name="toolTip">
-              <string>Add new configuration</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset theme="add"/>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QToolButton" name="toolButton_3">
-             <property name="toolTip">
-              <string>Delete configuration</string>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-             <property name="icon">
-              <iconset theme="remove"/>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="0" rowspan="4">
-            <widget class="QListWidget" name="listWidget"/>
-           </item>
-          </layout>
          </item>
         </layout>
        </widget>
@@ -146,7 +552,7 @@
      <x>0</x>
      <y>0</y>
      <width>1089</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
@@ -168,7 +574,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action_open">
    <property name="icon">
-    <iconset theme="document-open"/>
+    <iconset theme="document-open">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -182,7 +589,8 @@
   </action>
   <action name="action_new">
    <property name="icon">
-    <iconset theme="document-new"/>
+    <iconset theme="document-new">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -193,7 +601,8 @@
   </action>
   <action name="action_save">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -204,7 +613,8 @@
   </action>
   <action name="action_save_as">
    <property name="icon">
-    <iconset theme="document-save-as"/>
+    <iconset theme="document-save-as">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Save as...</string>

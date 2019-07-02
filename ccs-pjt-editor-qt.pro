@@ -26,10 +26,20 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    parser/configsettings.cpp \
+    parser/projectparser.cpp \
+    parser/projectreader.cpp \
+    parser/projectsettings.cpp \
+    parser/utils.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    parser/configsettings.h \
+    parser/projectparser.h \
+    parser/projectreader.h \
+    parser/projectsettings.h \
+    parser/utils.h
 
 FORMS += \
         mainwindow.ui
