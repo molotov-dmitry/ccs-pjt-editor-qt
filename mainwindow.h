@@ -53,7 +53,8 @@ private:
     QVector <QString>         mProjectPaths;
     QVector <ProjectSettings> mProjects;
 
-    void reloadProjectConfigs();
+    void clearProject();
+    void reloadProject();
     void clearProjectSettings();
     void reloadProjectSettings();
 };

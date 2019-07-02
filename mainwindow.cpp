@@ -113,7 +113,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
     else
     {
         ui->tabProjectSettings->setEnabled(true);
-        reloadProjectConfigs();
+        reloadProject();
         reloadProjectSettings();
     }
 }
@@ -132,18 +132,79 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
     }
 }
 
-void MainWindow::reloadProjectConfigs()
+void MainWindow::clearProject()
+{
+    ui->boxConfigurations->clear();
+}
+
+void MainWindow::reloadProject()
 {
     if (ui->boxProjects->currentIndex() < 0)
     {
         return;
     }
 
-    ui->boxConfigurations->clear();
+    int currentIndex = ui->boxProjects->currentIndex();
 
-    for (const std::string& config : mProjects[ui->boxProjects->currentIndex()].configs())
+    clearProject();
+
+    for (const std::string& config : mProjects[currentIndex].configs())
     {
         ui->boxConfigurations->addItem(mProjectCodec->toUnicode(config.c_str()));
+    }
+
+    if (mProjects[currentIndex].c_sources().size() > 0)
+    {
+        QTreeWidgetItem* root = new QTreeWidgetItem();
+
+        root->setText(0, QString::fromUtf8("Sources"));
+
+        for(const std::string& source : mProjects[currentIndex].c_sources())
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem();
+
+            item->setText(0, mProjectCodec->toUnicode(source.c_str()));
+
+            root->addChild(item);
+        }
+
+        ui->treeSources->addTopLevelItem(root);
+    }
+
+    if (mProjects[currentIndex].c_libraries().size() > 0)
+    {
+        QTreeWidgetItem* root = new QTreeWidgetItem();
+
+        root->setText(0, QString::fromUtf8("Libraries"));
+
+        for(const std::string& file : mProjects[currentIndex].c_libraries())
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem();
+
+            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
+
+            root->addChild(item);
+        }
+
+        ui->treeSources->addTopLevelItem(root);
+    }
+
+    if (mProjects[currentIndex].c_commands().size() > 0)
+    {
+        QTreeWidgetItem* root = new QTreeWidgetItem();
+
+        root->setText(0, QString::fromUtf8("Command"));
+
+        for(const std::string& file : mProjects[currentIndex].c_commands())
+        {
+            QTreeWidgetItem* item = new QTreeWidgetItem();
+
+            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
+
+            root->addChild(item);
+        }
+
+        ui->treeSources->addTopLevelItem(root);
     }
 }
 
