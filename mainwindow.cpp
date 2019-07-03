@@ -318,7 +318,7 @@ void MainWindow::reloadProjectSettings()
         break;
     }
 
-//    ui->editCpuFamily->setCurrentText(mProjectCodec->toUnicode(settings.cpuFamily.c_str()))
+    ui->editCpuFamily->setCurrentText(mProjectCodec->toUnicode(settings.cpuFamily().c_str()));
 
     for (const std::string& preBuildStep : configSettings.preBuildSteps())
     {
@@ -362,16 +362,16 @@ void MainWindow::reloadProjectSettings()
         ui->editCompilerDefines->setText(defineList.join(';'));
     }
 
-//    {
-//        QStringList undefinesList;
+    {
+        QStringList undefinesList;
 
-//        for (const std::string& undefine : configSettings.())
-//        {
-//            undefinesList.append(mProjectCodec->toUnicode(undefine.c_str()));
-//        }
+        for (const std::string& undefine : configSettings.undefines())
+        {
+            undefinesList.append(mProjectCodec->toUnicode(undefine.c_str()));
+        }
 
-//        ui->editCompilerIncludePaths->setText(undefinesList.join(';'));
-//    }
+        ui->editCompilerUndefines->setText(undefinesList.join(';'));
+    }
 
     {
         QStringList otherOptions;
