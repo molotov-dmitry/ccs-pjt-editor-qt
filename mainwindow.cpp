@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextCodec>
+#include <QFontDatabase>
 
 #include "parser/projectreader.h"
 #include "parser/utils.h"
@@ -14,10 +15,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->treePreBuildSteps->header()->setStretchLastSection(false);
-    ui->treePreBuildSteps->header()->resizeSections(QHeaderView::ResizeToContents);
-
     mProjectCodec = QTextCodec::codecForName("Windows-1251");
+
+    ui->treePreBuildSteps->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->treePostBuildSteps->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->treePreBuildSteps->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    ui->treePostBuildSteps->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+
+    ui->treePreBuildSteps->header()->setStretchLastSection(false);
+    ui->treePostBuildSteps->header()->setStretchLastSection(false);
+
+    ui->editCompilerOtherOptions->setSeparator(' ');
+    ui->editLinkerOtherOptions->setSeparator(' ');
+    ui->editArchiverOtherOptions->setSeparator(' ');
 }
 
 MainWindow::~MainWindow()
@@ -285,6 +295,8 @@ bool isIntConfig(const std::string& line, const char* option, int& value)
 
 void MainWindow::reloadProjectSettings()
 {
+    int currentTab = ui->tabProjectSettings->currentIndex();
+
     clearProjectSettings();
 
     if (ui->boxProjects->currentIndex() < 0)
@@ -324,18 +336,38 @@ void MainWindow::reloadProjectSettings()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
-        item->setText(0, mProjectCodec->toUnicode(preBuildStep.c_str()));
+        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
+        item->setText(1, mProjectCodec->toUnicode(preBuildStep.c_str()));
+        item->setFont(1, QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
+        item->setToolTip(1, mProjectCodec->toUnicode(preBuildStep.c_str()));
 
         ui->treePreBuildSteps->addTopLevelItem(item);
+
+        QComboBox* cb = new QComboBox(ui->treePreBuildSteps);
+        cb->addItem(QString::fromUtf8("If any file builds"));
+        cb->addItem(QString::fromUtf8("Always"));
+
+        ui->treePreBuildSteps->setItemWidget(item, 0, cb);
     }
 
     for (const std::string& postBuildStep : configSettings.postBuildSteps())
     {
         QTreeWidgetItem* item = new QTreeWidgetItem();
 
-        item->setText(0, mProjectCodec->toUnicode(postBuildStep.c_str()));
+        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
+        item->setText(1, mProjectCodec->toUnicode(postBuildStep.c_str()));
+        item->setFont(1, QFontDatabase::systemFont(QFontDatabase::FixedFont));
+
+        item->setToolTip(1, mProjectCodec->toUnicode(postBuildStep.c_str()));
 
         ui->treePostBuildSteps->addTopLevelItem(item);
+
+        QComboBox* cb = new QComboBox(ui->treePostBuildSteps);
+        cb->addItem(QString::fromUtf8("If any file builds"));
+        cb->addItem(QString::fromUtf8("Always"));
+
+        ui->treePostBuildSteps->setItemWidget(item, 0, cb);
     }
 
     //// Compiler ==============================================================
@@ -464,4 +496,6 @@ void MainWindow::reloadProjectSettings()
     }
 
     //// =======================================================================
+
+    ui->tabProjectSettings->setCurrentIndex(currentTab);
 }

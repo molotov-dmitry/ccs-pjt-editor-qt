@@ -35,7 +35,20 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QComboBox" name="boxProjects"/>
+        <widget class="QComboBox" name="boxProjects">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="Line" name="line">
@@ -45,7 +58,20 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="boxConfigurations"/>
+        <widget class="QComboBox" name="boxConfigurations">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>120</width>
+           <height>32</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QToolButton" name="buttonConfigurationAdd">
@@ -79,19 +105,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>723</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
     </item>
@@ -99,6 +112,9 @@
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
       </property>
       <widget class="QTreeWidget" name="treeSources">
        <property name="headerHidden">
@@ -116,7 +132,7 @@
          <item>
           <widget class="QTabWidget" name="tabProjectSettings">
            <property name="currentIndex">
-            <number>2</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tab">
             <attribute name="title">
@@ -210,20 +226,6 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QTreeWidget" name="treePreBuildSteps">
-               <column>
-                <property name="text">
-                 <string>Command</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Condition</string>
-                </property>
-               </column>
-              </widget>
-             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_7">
                <property name="text">
@@ -231,19 +233,135 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QTreeWidget" name="treePostBuildSteps">
-               <column>
-                <property name="text">
-                 <string>Command</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Condition</string>
-                </property>
-               </column>
-              </widget>
+             <item row="0" column="1">
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="1">
+                <widget class="QToolButton" name="buttonAddPreBuildStep">
+                 <property name="icon">
+                  <iconset theme="add">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QToolButton" name="buttonRemovePreBuildStep">
+                 <property name="icon">
+                  <iconset theme="remove">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="0" rowspan="3">
+                <widget class="QTreeWidget" name="treePreBuildSteps">
+                 <property name="dragDropMode">
+                  <enum>QAbstractItemView::DragDrop</enum>
+                 </property>
+                 <property name="defaultDropAction">
+                  <enum>Qt::MoveAction</enum>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionMode">
+                  <enum>QAbstractItemView::ExtendedSelection</enum>
+                 </property>
+                 <property name="verticalScrollMode">
+                  <enum>QAbstractItemView::ScrollPerPixel</enum>
+                 </property>
+                 <property name="indentation">
+                  <number>0</number>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string>Condition</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Command</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="1">
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="1">
+                <widget class="QToolButton" name="buttonAddPostBuildStep">
+                 <property name="icon">
+                  <iconset theme="add">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QToolButton" name="buttonRemovePostBuildStep">
+                 <property name="icon">
+                  <iconset theme="remove">
+                   <normaloff>.</normaloff>.</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <spacer name="verticalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="0" rowspan="3">
+                <widget class="QTreeWidget" name="treePostBuildSteps">
+                 <property name="dragDropMode">
+                  <enum>QAbstractItemView::DragDrop</enum>
+                 </property>
+                 <property name="defaultDropAction">
+                  <enum>Qt::MoveAction</enum>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionMode">
+                  <enum>QAbstractItemView::ExtendedSelection</enum>
+                 </property>
+                 <property name="verticalScrollMode">
+                  <enum>QAbstractItemView::ScrollPerPixel</enum>
+                 </property>
+                 <property name="indentation">
+                  <number>0</number>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string>Condition</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Command</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
@@ -259,21 +377,6 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <item>
-                <widget class="QLineEdit" name="editCompilerIncludePaths"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton">
-                 <property name="icon">
-                  <iconset theme="document-edit">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
@@ -281,42 +384,12 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_3">
-               <item>
-                <widget class="QLineEdit" name="editCompilerDefines"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_2">
-                 <property name="icon">
-                  <iconset theme="document-edit">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
              <item row="2" column="0">
               <widget class="QLabel" name="label_5">
                <property name="text">
                 <string>Undefines:</string>
                </property>
               </widget>
-             </item>
-             <item row="2" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_4">
-               <item>
-                <widget class="QLineEdit" name="editCompilerUndefines"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_3">
-                 <property name="icon">
-                  <iconset theme="document-edit">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </item>
              <item row="4" column="0">
               <widget class="QCheckBox" name="checkFullSymbolicDebug">
@@ -422,20 +495,33 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="1">
+              <widget class="ListEditor" name="editCompilerIncludePaths">
+               <property name="placeholderText">
+                <string>Include paths</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="ListEditor" name="editCompilerDefines">
+               <property name="placeholderText">
+                <string>Defined names</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="ListEditor" name="editCompilerUndefines">
+               <property name="placeholderText">
+                <string>Undefined names</string>
+               </property>
+              </widget>
+             </item>
              <item row="10" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_5">
-               <item>
-                <widget class="QLineEdit" name="editCompilerOtherOptions"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_4">
-                 <property name="icon">
-                  <iconset theme="document-edit">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="ListEditor" name="editCompilerOtherOptions">
+               <property name="placeholderText">
+                <string>Other compiler options</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -492,19 +578,11 @@
               </widget>
              </item>
              <item row="4" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_6">
-               <item>
-                <widget class="QLineEdit" name="editLinkerOtherOptions"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_5">
-                 <property name="icon">
-                  <iconset theme="document-edit">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="ListEditor" name="editLinkerOtherOptions">
+               <property name="placeholderText">
+                <string>Other linker options</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -521,19 +599,11 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <layout class="QHBoxLayout" name="horizontalLayout_7">
-               <item>
-                <widget class="QLineEdit" name="editArchiverOtherOptions"/>
-               </item>
-               <item>
-                <widget class="QToolButton" name="toolButton_6">
-                 <property name="icon">
-                  <iconset theme="document-edit">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="ListEditor" name="editArchiverOtherOptions">
+               <property name="placeholderText">
+                <string>Other archiver options</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -628,6 +698,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ListEditor</class>
+   <extends>QLineEdit</extends>
+   <header>listeditor.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

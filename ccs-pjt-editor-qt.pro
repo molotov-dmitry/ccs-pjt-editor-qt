@@ -31,7 +31,9 @@ SOURCES += \
     parser/projectparser.cpp \
     parser/projectreader.cpp \
     parser/projectsettings.cpp \
-    parser/utils.cpp
+    parser/utils.cpp \
+    listeditor.cpp \
+    dialoglisteditor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,10 +41,14 @@ HEADERS += \
     parser/projectparser.h \
     parser/projectreader.h \
     parser/projectsettings.h \
-    parser/utils.h
+    parser/utils.h \
+    listeditor.h \
+    dialoglisteditor.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    listeditor.ui \
+    dialoglisteditor.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
