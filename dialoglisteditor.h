@@ -1,4 +1,4 @@
-#ifndef DIALOGLISTEDITOR_H
+﻿#ifndef DIALOGLISTEDITOR_H
 #define DIALOGLISTEDITOR_H
 
 #include <QDialog>

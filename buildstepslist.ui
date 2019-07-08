@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BuildStepsList</class>
+ <widget class="QWidget" name="BuildStepsList">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout">
+   <item row="1" column="1">
+    <widget class="QToolButton" name="buttonRemove">
+     <property name="icon">
+      <iconset theme="remove">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>185</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="1">
+    <widget class="QToolButton" name="buttonAdd">
+     <property name="icon">
+      <iconset theme="add">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="3">
+    <widget class="QTreeWidget" name="tree">
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::InternalMove</enum>
+     </property>
+     <property name="defaultDropAction">
+      <enum>Qt::MoveAction</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="indentation">
+      <number>0</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Condition</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Command</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

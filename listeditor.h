@@ -1,4 +1,4 @@
-#ifndef LISTEDITOR_H
+﻿#ifndef LISTEDITOR_H
 #define LISTEDITOR_H
 
 #include <QWidget>

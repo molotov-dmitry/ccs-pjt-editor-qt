@@ -33,7 +33,9 @@ SOURCES += \
     parser/projectsettings.cpp \
     parser/utils.cpp \
     listeditor.cpp \
-    dialoglisteditor.cpp
+    dialoglisteditor.cpp \
+    buildstepconditiondelegate.cpp \
+    buildstepslist.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,12 +45,15 @@ HEADERS += \
     parser/projectsettings.h \
     parser/utils.h \
     listeditor.h \
-    dialoglisteditor.h
+    dialoglisteditor.h \
+    buildstepconditiondelegate.h \
+    buildstepslist.h
 
 FORMS += \
         mainwindow.ui \
     listeditor.ui \
-    dialoglisteditor.ui
+    dialoglisteditor.ui \
+    buildstepslist.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -17,14 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mProjectCodec = QTextCodec::codecForName("Windows-1251");
 
-    ui->treePreBuildSteps->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    ui->treePostBuildSteps->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    ui->treePreBuildSteps->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-    ui->treePostBuildSteps->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-
-    ui->treePreBuildSteps->header()->setStretchLastSection(false);
-    ui->treePostBuildSteps->header()->setStretchLastSection(false);
-
     ui->editCompilerOtherOptions->setSeparator(' ');
     ui->editLinkerOtherOptions->setSeparator(' ');
     ui->editArchiverOtherOptions->setSeparator(' ');
@@ -225,8 +217,8 @@ void MainWindow::clearProjectSettings()
     ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_UNKNOWN);
     ui->editCpuFamily->clear();
 
-    ui->treePreBuildSteps->clear();
-    ui->treePostBuildSteps->clear();
+    ui->widgetPreBuildSteps->clear();
+    ui->widgetPostBuildSteps->clear();
 
     //// Compiler ==============================================================
 
@@ -334,40 +326,14 @@ void MainWindow::reloadProjectSettings()
 
     for (const std::string& preBuildStep : configSettings.preBuildSteps())
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem();
-
-        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
-        item->setText(1, mProjectCodec->toUnicode(preBuildStep.c_str()));
-        item->setFont(1, QFontDatabase::systemFont(QFontDatabase::FixedFont));
-
-        item->setToolTip(1, mProjectCodec->toUnicode(preBuildStep.c_str()));
-
-        ui->treePreBuildSteps->addTopLevelItem(item);
-
-        QComboBox* cb = new QComboBox(ui->treePreBuildSteps);
-        cb->addItem(QString::fromUtf8("If any file builds"));
-        cb->addItem(QString::fromUtf8("Always"));
-
-        ui->treePreBuildSteps->setItemWidget(item, 0, cb);
+        ui->widgetPreBuildSteps->addBuildStep(mProjectCodec->toUnicode(preBuildStep.c_str()),
+                                              BUILD_IF_ANY_FILE_BUILDS);
     }
 
     for (const std::string& postBuildStep : configSettings.postBuildSteps())
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem();
-
-        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
-        item->setText(1, mProjectCodec->toUnicode(postBuildStep.c_str()));
-        item->setFont(1, QFontDatabase::systemFont(QFontDatabase::FixedFont));
-
-        item->setToolTip(1, mProjectCodec->toUnicode(postBuildStep.c_str()));
-
-        ui->treePostBuildSteps->addTopLevelItem(item);
-
-        QComboBox* cb = new QComboBox(ui->treePostBuildSteps);
-        cb->addItem(QString::fromUtf8("If any file builds"));
-        cb->addItem(QString::fromUtf8("Always"));
-
-        ui->treePostBuildSteps->setItemWidget(item, 0, cb);
+        ui->widgetPostBuildSteps->addBuildStep(mProjectCodec->toUnicode(postBuildStep.c_str()),
+                                              BUILD_IF_ANY_FILE_BUILDS);
     }
 
     //// Compiler ==============================================================

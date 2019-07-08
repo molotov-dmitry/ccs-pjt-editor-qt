@@ -234,134 +234,10 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="0" column="1">
-                <widget class="QToolButton" name="buttonAddPreBuildStep">
-                 <property name="icon">
-                  <iconset theme="add">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QToolButton" name="buttonRemovePreBuildStep">
-                 <property name="icon">
-                  <iconset theme="remove">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="0" column="0" rowspan="3">
-                <widget class="QTreeWidget" name="treePreBuildSteps">
-                 <property name="dragDropMode">
-                  <enum>QAbstractItemView::DragDrop</enum>
-                 </property>
-                 <property name="defaultDropAction">
-                  <enum>Qt::MoveAction</enum>
-                 </property>
-                 <property name="alternatingRowColors">
-                  <bool>true</bool>
-                 </property>
-                 <property name="selectionMode">
-                  <enum>QAbstractItemView::ExtendedSelection</enum>
-                 </property>
-                 <property name="verticalScrollMode">
-                  <enum>QAbstractItemView::ScrollPerPixel</enum>
-                 </property>
-                 <property name="indentation">
-                  <number>0</number>
-                 </property>
-                 <column>
-                  <property name="text">
-                   <string>Condition</string>
-                  </property>
-                 </column>
-                 <column>
-                  <property name="text">
-                   <string>Command</string>
-                  </property>
-                 </column>
-                </widget>
-               </item>
-              </layout>
+              <widget class="BuildStepsList" name="widgetPreBuildSteps" native="true"/>
              </item>
-             <item row="2" column="1">
-              <layout class="QGridLayout" name="gridLayout_2">
-               <item row="0" column="1">
-                <widget class="QToolButton" name="buttonAddPostBuildStep">
-                 <property name="icon">
-                  <iconset theme="add">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QToolButton" name="buttonRemovePostBuildStep">
-                 <property name="icon">
-                  <iconset theme="remove">
-                   <normaloff>.</normaloff>.</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <spacer name="verticalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="0" column="0" rowspan="3">
-                <widget class="QTreeWidget" name="treePostBuildSteps">
-                 <property name="dragDropMode">
-                  <enum>QAbstractItemView::DragDrop</enum>
-                 </property>
-                 <property name="defaultDropAction">
-                  <enum>Qt::MoveAction</enum>
-                 </property>
-                 <property name="alternatingRowColors">
-                  <bool>true</bool>
-                 </property>
-                 <property name="selectionMode">
-                  <enum>QAbstractItemView::ExtendedSelection</enum>
-                 </property>
-                 <property name="verticalScrollMode">
-                  <enum>QAbstractItemView::ScrollPerPixel</enum>
-                 </property>
-                 <property name="indentation">
-                  <number>0</number>
-                 </property>
-                 <column>
-                  <property name="text">
-                   <string>Condition</string>
-                  </property>
-                 </column>
-                 <column>
-                  <property name="text">
-                   <string>Command</string>
-                  </property>
-                 </column>
-                </widget>
-               </item>
-              </layout>
+             <item row="1" column="1">
+              <widget class="BuildStepsList" name="widgetPostBuildSteps" native="true"/>
              </item>
             </layout>
            </widget>
@@ -703,6 +579,12 @@
    <class>ListEditor</class>
    <extends>QLineEdit</extends>
    <header>listeditor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BuildStepsList</class>
+   <extends>QWidget</extends>
+   <header>buildstepslist.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

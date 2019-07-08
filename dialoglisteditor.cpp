@@ -1,4 +1,4 @@
-#include "dialoglisteditor.h"
+﻿#include "dialoglisteditor.h"
 #include "ui_dialoglisteditor.h"
 
 DialogListEditor::DialogListEditor(QWidget *parent) :

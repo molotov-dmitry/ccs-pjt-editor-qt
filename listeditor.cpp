@@ -1,4 +1,4 @@
-#include "listeditor.h"
+﻿#include "listeditor.h"
 #include "ui_listeditor.h"
 
 #include "dialoglisteditor.h"
