@@ -35,7 +35,7 @@ void BuildStepsList::addBuildStep(const QString &command, BuildCondition conditi
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
 
-    item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
+    item->setFlags((item->flags() & ~Qt::ItemIsDropEnabled) | Qt::ItemIsEditable);
     item->setFont(1, QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     item->setIcon(1, commandIcon(command));
@@ -97,7 +97,7 @@ void BuildStepsList::on_buttonAdd_clicked()
 {
     QTreeWidgetItem* item = new QTreeWidgetItem();
 
-    item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled | Qt::ItemIsEditable);
+    item->setFlags((item->flags() & ~Qt::ItemIsDropEnabled) | Qt::ItemIsEditable);
     item->setFont(1, QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     item->setIcon(1, commandIcon(QString()));

@@ -11,6 +11,8 @@ BuildStepConditionDelegate::BuildStepConditionDelegate(QObject *parent) : QItemD
 
 QWidget *BuildStepConditionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+
     QComboBox* editor = new QComboBox(parent);
 
     for (int i = 0; i < BUILD_CONDITION_COUNT; ++i)
