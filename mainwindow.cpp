@@ -90,6 +90,7 @@ void MainWindow::on_boxProjectType_currentIndexChanged(int index)
         ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
         ui->tabProjectSettings->setTabEnabled(TAB_LINKER, true);
         ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
+
         break;
 
     case ProjectSettings::PROJECT_LIBRARY:
@@ -97,6 +98,7 @@ void MainWindow::on_boxProjectType_currentIndexChanged(int index)
         ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
         ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
         ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, true);
+
         break;
 
     case ProjectSettings::PROJECT_UNKNOWN:
@@ -105,7 +107,41 @@ void MainWindow::on_boxProjectType_currentIndexChanged(int index)
         ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, false);
         ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
         ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
+
         break;
+    }
+}
+
+void MainWindow::on_boxProjectType_activated(int index)
+{
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    ProjectSettings::Type projectType = ProjectSettings::Type::UNKNOWN;
+
+    switch (index)
+    {
+    case ProjectSettings::PROJECT_EXECUTABLE:
+
+        projectType = ProjectSettings::Type::EXECUTABLE;
+
+        break;
+
+    case ProjectSettings::PROJECT_LIBRARY:
+        projectType = ProjectSettings::Type::LIBRARY;
+
+        break;
+
+    case ProjectSettings::PROJECT_UNKNOWN:
+    default:
+
+        projectType = ProjectSettings::Type::UNKNOWN;
+
+        break;
+    }
+
+    if (currentIndex >= 0)
+    {
+        mProjects[currentIndex].setProjectType(projectType);
     }
 }
 

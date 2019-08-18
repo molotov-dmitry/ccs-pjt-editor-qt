@@ -32,6 +32,8 @@ private slots:
 
     void on_boxProjectType_currentIndexChanged(int index);
 
+    void on_boxProjectType_activated(int index);
+
     void on_boxProjects_currentIndexChanged(int index);
 
     void on_boxConfigurations_currentIndexChanged(int index);
@@ -43,6 +45,8 @@ private slots:
     void on_buttonConfigurationCopy_clicked();
 
     void on_buttonConfigurationRemove_clicked();
+
+
 
 private:
     Ui::MainWindow *ui;
