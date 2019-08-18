@@ -36,6 +36,14 @@ private slots:
 
     void on_boxConfigurations_currentIndexChanged(int index);
 
+    void on_buttonConfigurationAdd_clicked();
+
+    void on_buttonConfigurationRename_clicked();
+
+    void on_buttonConfigurationCopy_clicked();
+
+    void on_buttonConfigurationRemove_clicked();
+
 private:
     Ui::MainWindow *ui;
 

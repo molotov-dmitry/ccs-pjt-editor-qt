@@ -9,6 +9,8 @@
 #include "parser/projectreader.h"
 #include "parser/utils.h"
 
+#include "dialogconfigurationrename.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -20,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->editCompilerOtherOptions->setSeparator(' ');
     ui->editLinkerOtherOptions->setSeparator(' ');
     ui->editArchiverOtherOptions->setSeparator(' ');
+
+    on_boxProjects_currentIndexChanged(ui->boxProjects->currentIndex());
+    on_boxConfigurations_currentIndexChanged(ui->boxConfigurations->currentIndex());
 }
 
 MainWindow::~MainWindow()
@@ -125,11 +130,17 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
     if (index < 0)
     {
         ui->tabProjectSettings->setEnabled(false);
+        ui->buttonConfigurationCopy->setEnabled(false);
+        ui->buttonConfigurationRename->setEnabled(false);
+        ui->buttonConfigurationRemove->setEnabled(false);
         clearProjectSettings();
     }
     else
     {
         ui->tabProjectSettings->setEnabled(true);
+        ui->buttonConfigurationCopy->setEnabled(true);
+        ui->buttonConfigurationRename->setEnabled(true);
+        ui->buttonConfigurationRemove->setEnabled(true);
         reloadProjectSettings();
     }
 }
@@ -464,4 +475,101 @@ void MainWindow::reloadProjectSettings()
     //// =======================================================================
 
     ui->tabProjectSettings->setCurrentIndex(currentTab);
+}
+
+void MainWindow::on_buttonConfigurationAdd_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+
+    if (projectIndex < 0)
+    {
+        return;
+    }
+
+    DialogConfigurationRename dialog;
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        std::string configName = dialog.name().toStdString();
+
+        ProjectSettings& project = mProjects[projectIndex];
+
+        project.addConfig(configName.c_str());
+
+        ui->boxConfigurations->addItem(dialog.name());
+    }
+}
+
+void MainWindow::on_buttonConfigurationRename_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+    int configurationIndex = ui->boxConfigurations->currentIndex();
+
+    if (projectIndex < 0 || configurationIndex < 0)
+    {
+        return;
+    }
+
+    DialogConfigurationRename dialog;
+
+    dialog.setName(ui->boxConfigurations->currentText());
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        std::string oldName = ui->boxConfigurations->currentText().toStdString();
+        std::string configName = dialog.name().toStdString();
+
+        ProjectSettings& project = mProjects[projectIndex];
+
+        project.renameConfig(oldName, configName);
+
+        ui->boxConfigurations->setItemText(configurationIndex, dialog.name());
+    }
+}
+
+void MainWindow::on_buttonConfigurationCopy_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+    int configurationIndex = ui->boxConfigurations->currentIndex();
+
+    if (projectIndex < 0 || configurationIndex < 0)
+    {
+        return;
+    }
+
+    DialogConfigurationRename dialog;
+
+    dialog.setName(ui->boxConfigurations->currentText() + " Copy");
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        std::string oldName = ui->boxConfigurations->currentText().toStdString();
+        std::string configName = dialog.name().toStdString();
+
+        ProjectSettings& project = mProjects[projectIndex];
+
+        project.copyConfig(oldName, configName);
+
+        ui->boxConfigurations->addItem(dialog.name());
+
+    }
+}
+
+void MainWindow::on_buttonConfigurationRemove_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+    int configurationIndex = ui->boxConfigurations->currentIndex();
+
+    if (projectIndex < 0 || configurationIndex < 0)
+    {
+        return;
+    }
+
+    std::string configName = ui->boxConfigurations->currentText().toStdString();
+
+    ProjectSettings& project = mProjects[projectIndex];
+
+    project.removeConfig(configName.c_str());
+
+    ui->boxConfigurations->removeItem(configurationIndex);
 }

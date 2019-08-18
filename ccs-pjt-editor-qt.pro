@@ -35,7 +35,8 @@ SOURCES += \
     listeditor.cpp \
     dialoglisteditor.cpp \
     buildstepconditiondelegate.cpp \
-    buildstepslist.cpp
+    buildstepslist.cpp \
+    dialogconfigurationrename.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -47,13 +48,15 @@ HEADERS += \
     listeditor.h \
     dialoglisteditor.h \
     buildstepconditiondelegate.h \
-    buildstepslist.h
+    buildstepslist.h \
+    dialogconfigurationrename.h
 
 FORMS += \
         mainwindow.ui \
     listeditor.ui \
     dialoglisteditor.ui \
-    buildstepslist.ui
+    buildstepslist.ui \
+    dialogconfigurationrename.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
