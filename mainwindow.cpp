@@ -262,7 +262,7 @@ void MainWindow::clearProjectSettings()
     //// General settings ======================================================
 
     ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_UNKNOWN);
-    ui->editCpuFamily->clear();
+    ui->editCpuFamily->clearEditText();
 
     ui->widgetPreBuildSteps->clear();
     ui->widgetPostBuildSteps->clear();
