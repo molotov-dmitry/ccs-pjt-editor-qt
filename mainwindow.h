@@ -69,6 +69,8 @@ private:
     void reloadProject();
     void clearProjectSettings();
     void reloadProjectSettings();
+
+    void updateToolsTabs();
 };
 
 #endif // MAINWINDOW_H

@@ -7,6 +7,7 @@
 #include <QFontDatabase>
 
 #include "parser/projectreader.h"
+#include "parser/export/projectexportccs3.h"
 #include "parser/utils.h"
 
 #include "dialogconfigurationrename.h"
@@ -35,7 +36,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_action_open_triggered()
 {
     QString path = QFileDialog::getOpenFileName(this,
-                                                QString::fromUtf8("Открыть  проект"),
+                                                QString::fromUtf8("Открыть проект"),
                                                 QString(),
                                                 QString("*.pjt"));
 
@@ -51,7 +52,7 @@ void MainWindow::on_action_open_triggered()
     if (not reader.read())
     {
         QMessageBox::critical(this,
-                              QString::fromUtf8("Открыть  проект"),
+                              QString::fromUtf8("Открытие проект"),
                               QString::fromUtf8(reader.lastError().c_str()));
 
         return;
@@ -73,43 +74,102 @@ void MainWindow::on_action_new_triggered()
 
 void MainWindow::on_action_save_triggered()
 {
+    if (ui->boxProjects->currentIndex() < 0)
+    {
+        return;
+    }
 
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    if (mProjectPaths[currentIndex].isEmpty())
+    {
+        on_action_save_as_triggered();
+    }
+    else
+    {
+        QString path = mProjectPaths[currentIndex];
+
+        ProjectExportCcs3 writer;
+
+        if (not writer.write(mProjects[currentIndex], path.toStdString().c_str()))
+        {
+            QMessageBox::critical(this,
+                                  QString::fromUtf8("Сохранение проекта"),
+                                  QString::fromUtf8(writer.lastError().c_str()));
+
+            return;
+        }
+    }
 }
 
 void MainWindow::on_action_save_as_triggered()
 {
+    if (ui->boxProjects->currentIndex() < 0)
+    {
+        return;
+    }
 
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    QString path = QFileDialog::getSaveFileName(this,
+                                                QString::fromUtf8("Сохранить проект"),
+                                                QString(),
+                                                QString("*.pjt"));
+
+    if (path.isEmpty())
+    {
+        return;
+    }
+
+    QFileInfo fileInfo(path);
+
+    ProjectExportCcs3 writer;
+
+    if (not writer.write(mProjects[currentIndex], path.toStdString().c_str()))
+    {
+        QMessageBox::critical(this,
+                              QString::fromUtf8("Сохранение проекта"),
+                              QString::fromUtf8(writer.lastError().c_str()));
+
+        return;
+    }
+
+    mProjectPaths[currentIndex] = path;
+    ui->boxProjects->setItemText(currentIndex, fileInfo.fileName());
 }
 
 void MainWindow::on_boxProjectType_currentIndexChanged(int index)
 {
-    switch (index)
-    {
-    case ProjectSettings::PROJECT_EXECUTABLE:
-        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
+    Q_UNUSED(index);
 
-        break;
+    updateToolsTabs();
+//    switch (index)
+//    {
+//    case ProjectSettings::PROJECT_EXECUTABLE:
+//        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
+//        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
+//        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, true);
+//        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
 
-    case ProjectSettings::PROJECT_LIBRARY:
-        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, true);
+//        break;
 
-        break;
+//    case ProjectSettings::PROJECT_LIBRARY:
+//        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
+//        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
+//        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
+//        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, true);
 
-    case ProjectSettings::PROJECT_UNKNOWN:
-    default:
-        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
+//        break;
 
-        break;
-    }
+//    case ProjectSettings::PROJECT_UNKNOWN:
+//    default:
+//        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, false);
+//        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, false);
+//        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
+//        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
+
+//        break;
+//    }
 }
 
 void MainWindow::on_boxProjectType_activated(int index)
@@ -151,11 +211,19 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
     {
         ui->tabProjectSettings->setEnabled(false);
         ui->boxConfigurations->clear();
+
+        ui->action_save->setEnabled(false);
+        ui->action_save_as->setEnabled(false);
+
         clearProjectSettings();
     }
     else
     {
         ui->tabProjectSettings->setEnabled(true);
+
+        ui->action_save->setEnabled(true);
+        ui->action_save_as->setEnabled(true);
+
         reloadProject();
         reloadProjectSettings();
     }
@@ -165,7 +233,6 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
 {
     if (index < 0)
     {
-        ui->tabProjectSettings->setEnabled(false);
         ui->buttonConfigurationCopy->setEnabled(false);
         ui->buttonConfigurationRename->setEnabled(false);
         ui->buttonConfigurationRemove->setEnabled(false);
@@ -173,17 +240,120 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
     }
     else
     {
-        ui->tabProjectSettings->setEnabled(true);
         ui->buttonConfigurationCopy->setEnabled(true);
         ui->buttonConfigurationRename->setEnabled(true);
         ui->buttonConfigurationRemove->setEnabled(true);
         reloadProjectSettings();
     }
+
+    updateToolsTabs();
+}
+
+void MainWindow::on_buttonConfigurationAdd_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+
+    if (projectIndex < 0)
+    {
+        return;
+    }
+
+    DialogConfigurationRename dialog;
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        std::string configName = dialog.name().toStdString();
+
+        ProjectSettings& project = mProjects[projectIndex];
+
+        project.addConfig(configName.c_str());
+
+        ui->boxConfigurations->addItem(dialog.name());
+    }
+}
+
+void MainWindow::on_buttonConfigurationRename_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+    int configurationIndex = ui->boxConfigurations->currentIndex();
+
+    if (projectIndex < 0 || configurationIndex < 0)
+    {
+        return;
+    }
+
+    DialogConfigurationRename dialog;
+
+    dialog.setName(ui->boxConfigurations->currentText());
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        std::string oldName = ui->boxConfigurations->currentText().toStdString();
+        std::string configName = dialog.name().toStdString();
+
+        ProjectSettings& project = mProjects[projectIndex];
+
+        project.renameConfig(oldName, configName);
+
+        ui->boxConfigurations->setItemText(configurationIndex, dialog.name());
+    }
+}
+
+void MainWindow::on_buttonConfigurationCopy_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+    int configurationIndex = ui->boxConfigurations->currentIndex();
+
+    if (projectIndex < 0 || configurationIndex < 0)
+    {
+        return;
+    }
+
+    DialogConfigurationRename dialog;
+
+    dialog.setName(ui->boxConfigurations->currentText() + " Copy");
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        std::string oldName = ui->boxConfigurations->currentText().toStdString();
+        std::string configName = dialog.name().toStdString();
+
+        ProjectSettings& project = mProjects[projectIndex];
+
+        project.copyConfig(oldName, configName);
+
+        ui->boxConfigurations->addItem(dialog.name());
+
+    }
+}
+
+void MainWindow::on_buttonConfigurationRemove_clicked()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
+    int configurationIndex = ui->boxConfigurations->currentIndex();
+
+    if (projectIndex < 0 || configurationIndex < 0)
+    {
+        return;
+    }
+
+    std::string configName = ui->boxConfigurations->currentText().toStdString();
+
+    ProjectSettings& project = mProjects[projectIndex];
+
+    project.removeConfig(configName.c_str());
+
+    ui->boxConfigurations->removeItem(configurationIndex);
 }
 
 void MainWindow::clearProject()
 {
     ui->boxConfigurations->clear();
+
+    //// General settings ======================================================
+
+    ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_UNKNOWN);
+    ui->editCpuFamily->clearEditText();
 }
 
 void MainWindow::reloadProject()
@@ -195,12 +365,20 @@ void MainWindow::reloadProject()
 
     int currentIndex = ui->boxProjects->currentIndex();
 
+    const ProjectSettings& settings = mProjects.at(ui->boxProjects->currentIndex());
+
     clearProject();
+
+    //// Configurations ========================================================
 
     for (const std::string& config : mProjects[currentIndex].configs())
     {
         ui->boxConfigurations->addItem(mProjectCodec->toUnicode(config.c_str()));
     }
+
+    //// Files =================================================================
+
+    //// Source files ----------------------------------------------------------
 
     if (mProjects[currentIndex].c_sources().size() > 0)
     {
@@ -220,6 +398,8 @@ void MainWindow::reloadProject()
         ui->treeSources->addTopLevelItem(root);
     }
 
+    //// Libraries files -------------------------------------------------------
+
     if (mProjects[currentIndex].c_libraries().size() > 0)
     {
         QTreeWidgetItem* root = new QTreeWidgetItem();
@@ -238,6 +418,8 @@ void MainWindow::reloadProject()
         ui->treeSources->addTopLevelItem(root);
     }
 
+    //// Command files ---------------------------------------------------------
+
     if (mProjects[currentIndex].c_commands().size() > 0)
     {
         QTreeWidgetItem* root = new QTreeWidgetItem();
@@ -255,14 +437,31 @@ void MainWindow::reloadProject()
 
         ui->treeSources->addTopLevelItem(root);
     }
+
+    //// General settings ======================================================
+
+    switch (settings.projectType())
+    {
+    case ProjectSettings::Type::UNKNOWN:
+        ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_UNKNOWN);
+        break;
+
+    case ProjectSettings::Type::EXECUTABLE:
+        ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_EXECUTABLE);
+        break;
+
+    case ProjectSettings::Type::LIBRARY:
+        ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_LIBRARY);
+        break;
+    }
+
+    ui->editCpuFamily->setCurrentText(mProjectCodec->toUnicode(settings.cpuFamily().c_str()));
 }
 
 void MainWindow::clearProjectSettings()
 {
-    //// General settings ======================================================
 
-    ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_UNKNOWN);
-    ui->editCpuFamily->clearEditText();
+    //// Build steps ===========================================================
 
     ui->widgetPreBuildSteps->clear();
     ui->widgetPostBuildSteps->clear();
@@ -299,7 +498,7 @@ void MainWindow::clearProjectSettings()
     ui->editArchiverOtherOptions->clear();
 }
 
-bool isConfig(const std::string& line, const char* option, std::string& value)
+static bool isConfig(const std::string& line, const char* option, std::string& value)
 {
     if (starts_with(line, option, true))
     {
@@ -320,7 +519,7 @@ bool isConfig(const std::string& line, const char* option, std::string& value)
     return true;
 }
 
-bool isIntConfig(const std::string& line, const char* option, int& value)
+static bool isIntConfig(const std::string& line, const char* option, int& value)
 {
     std::string valueStr;
 
@@ -352,24 +551,7 @@ void MainWindow::reloadProjectSettings()
     const std::string config = ui->boxConfigurations->currentText().toStdString();
     ConfigSettings configSettings = settings.configSettings(config.c_str());
 
-    //// General settings ======================================================
-
-    switch (settings.projectType())
-    {
-    case ProjectSettings::Type::UNKNOWN:
-        ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_UNKNOWN);
-        break;
-
-    case ProjectSettings::Type::EXECUTABLE:
-        ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_EXECUTABLE);
-        break;
-
-    case ProjectSettings::Type::LIBRARY:
-        ui->boxProjectType->setCurrentIndex(ProjectSettings::PROJECT_LIBRARY);
-        break;
-    }
-
-    ui->editCpuFamily->setCurrentText(mProjectCodec->toUnicode(settings.cpuFamily().c_str()));
+    //// Build steps ===========================================================
 
     for (const std::string& preBuildStep : configSettings.preBuildSteps())
     {
@@ -380,7 +562,7 @@ void MainWindow::reloadProjectSettings()
     for (const std::string& postBuildStep : configSettings.postBuildSteps())
     {
         ui->widgetPostBuildSteps->addBuildStep(mProjectCodec->toUnicode(postBuildStep.c_str()),
-                                              BUILD_IF_ANY_FILE_BUILDS);
+                                               BUILD_IF_ANY_FILE_BUILDS);
     }
 
     //// Compiler ==============================================================
@@ -513,99 +695,57 @@ void MainWindow::reloadProjectSettings()
     ui->tabProjectSettings->setCurrentIndex(currentTab);
 }
 
-void MainWindow::on_buttonConfigurationAdd_clicked()
+void MainWindow::updateToolsTabs()
 {
-    int projectIndex = ui->boxProjects->currentIndex();
+    int index = ui->boxProjectType->currentIndex();
 
-    if (projectIndex < 0)
+    if (ui->boxProjects->currentIndex() < 0)
     {
-        return;
+        index = -1;
     }
 
-    DialogConfigurationRename dialog;
-
-    if (dialog.exec() == QDialog::Accepted)
+    if (ui->boxConfigurations->currentIndex() < 0)
     {
-        std::string configName = dialog.name().toStdString();
+        index = -1;
+    }
 
-        ProjectSettings& project = mProjects[projectIndex];
+    switch (index)
+    {
+    case ProjectSettings::PROJECT_EXECUTABLE:
+        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
+        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
+        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, true);
+        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
 
-        project.addConfig(configName.c_str());
+        break;
 
-        ui->boxConfigurations->addItem(dialog.name());
+    case ProjectSettings::PROJECT_LIBRARY:
+        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
+        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
+        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
+        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, true);
+
+        break;
+
+    case ProjectSettings::PROJECT_UNKNOWN:
+    default:
+        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, false);
+        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, false);
+        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
+        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
+
+        break;
     }
 }
 
-void MainWindow::on_buttonConfigurationRename_clicked()
-{
-    int projectIndex = ui->boxProjects->currentIndex();
-    int configurationIndex = ui->boxConfigurations->currentIndex();
 
-    if (projectIndex < 0 || configurationIndex < 0)
-    {
-        return;
-    }
 
-    DialogConfigurationRename dialog;
 
-    dialog.setName(ui->boxConfigurations->currentText());
 
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        std::string oldName = ui->boxConfigurations->currentText().toStdString();
-        std::string configName = dialog.name().toStdString();
 
-        ProjectSettings& project = mProjects[projectIndex];
 
-        project.renameConfig(oldName, configName);
 
-        ui->boxConfigurations->setItemText(configurationIndex, dialog.name());
-    }
-}
 
-void MainWindow::on_buttonConfigurationCopy_clicked()
-{
-    int projectIndex = ui->boxProjects->currentIndex();
-    int configurationIndex = ui->boxConfigurations->currentIndex();
 
-    if (projectIndex < 0 || configurationIndex < 0)
-    {
-        return;
-    }
 
-    DialogConfigurationRename dialog;
 
-    dialog.setName(ui->boxConfigurations->currentText() + " Copy");
-
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        std::string oldName = ui->boxConfigurations->currentText().toStdString();
-        std::string configName = dialog.name().toStdString();
-
-        ProjectSettings& project = mProjects[projectIndex];
-
-        project.copyConfig(oldName, configName);
-
-        ui->boxConfigurations->addItem(dialog.name());
-
-    }
-}
-
-void MainWindow::on_buttonConfigurationRemove_clicked()
-{
-    int projectIndex = ui->boxProjects->currentIndex();
-    int configurationIndex = ui->boxConfigurations->currentIndex();
-
-    if (projectIndex < 0 || configurationIndex < 0)
-    {
-        return;
-    }
-
-    std::string configName = ui->boxConfigurations->currentText().toStdString();
-
-    ProjectSettings& project = mProjects[projectIndex];
-
-    project.removeConfig(configName.c_str());
-
-    ui->boxConfigurations->removeItem(configurationIndex);
-}

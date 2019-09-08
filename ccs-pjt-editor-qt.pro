@@ -36,7 +36,9 @@ SOURCES += \
     dialoglisteditor.cpp \
     buildstepconditiondelegate.cpp \
     buildstepslist.cpp \
-    dialogconfigurationrename.cpp
+    dialogconfigurationrename.cpp \
+    parser/export/abstractprojectexport.cpp \
+    parser/export/projectexportccs3.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,7 +51,9 @@ HEADERS += \
     dialoglisteditor.h \
     buildstepconditiondelegate.h \
     buildstepslist.h \
-    dialogconfigurationrename.h
+    dialogconfigurationrename.h \
+    parser/export/abstractprojectexport.h \
+    parser/export/projectexportccs3.h
 
 FORMS += \
         mainwindow.ui \
