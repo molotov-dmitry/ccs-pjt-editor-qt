@@ -52,7 +52,7 @@ void MainWindow::on_action_open_triggered()
     if (not reader.read())
     {
         QMessageBox::critical(this,
-                              QString::fromUtf8("Открытие проект"),
+                              QString::fromUtf8("Открытие проекта"),
                               QString::fromUtf8(reader.lastError().c_str()));
 
         return;
@@ -143,33 +143,6 @@ void MainWindow::on_boxProjectType_currentIndexChanged(int index)
     Q_UNUSED(index);
 
     updateToolsTabs();
-//    switch (index)
-//    {
-//    case ProjectSettings::PROJECT_EXECUTABLE:
-//        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
-//        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
-//        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, true);
-//        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
-
-//        break;
-
-//    case ProjectSettings::PROJECT_LIBRARY:
-//        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
-//        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
-//        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
-//        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, true);
-
-//        break;
-
-//    case ProjectSettings::PROJECT_UNKNOWN:
-//    default:
-//        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, false);
-//        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, false);
-//        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
-//        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
-
-//        break;
-//    }
 }
 
 void MainWindow::on_boxProjectType_activated(int index)
@@ -202,6 +175,16 @@ void MainWindow::on_boxProjectType_activated(int index)
     if (currentIndex >= 0)
     {
         mProjects[currentIndex].setProjectType(projectType);
+    }
+}
+
+void MainWindow::on_editCpuFamily_activated(const QString &cpuFamily)
+{
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    if (currentIndex >= 0)
+    {
+        mProjects[currentIndex].setCpuFamily(cpuFamily.toStdString().c_str());
     }
 }
 
@@ -346,6 +329,75 @@ void MainWindow::on_buttonConfigurationRemove_clicked()
     ui->boxConfigurations->removeItem(configurationIndex);
 }
 
+void MainWindow::on_buttonAddSource_clicked()
+{
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    if (currentIndex < 0)
+    {
+        return;
+    }
+
+    if (mProjectPaths[currentIndex].isEmpty())
+    {
+        QMessageBox::warning(this,
+                             QString::fromUtf8("Добавление файлов"),
+                             QString::fromUtf8("Необходимо сохранить проект прежде чем добавлять файлы"));
+        return;
+    }
+
+    ProjectSettings& project = mProjects[currentIndex];
+
+    QStringList path = QFileDialog::getOpenFileNames(this,
+                                                     QString::fromUtf8("Добавить файлы"),
+                                                     QString(),
+                                                     QString("*"));
+
+    if (path.isEmpty())
+    {
+        return;
+    }
+
+    QFileInfo fileInfo(mProjectPaths[currentIndex]);
+    QDir projectDir = fileInfo.absoluteDir();
+
+    foreach (const QString& source, path)
+    {
+        project.addSource(projectDir.relativeFilePath(source).toStdString().c_str());
+    }
+
+    reloadSources();
+}
+
+void MainWindow::on_buttonRemoveSource_clicked()
+{
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    if (currentIndex < 0)
+    {
+        return;
+    }
+
+    ProjectSettings& project = mProjects[currentIndex];
+
+    if (ui->treeSources->selectedItems().isEmpty())
+    {
+        return;
+    }
+
+    foreach (const QTreeWidgetItem* item, ui->treeSources->selectedItems())
+    {
+        if (item->childCount() > 0)
+        {
+            continue;
+        }
+
+        project.removeSource(item->text(0).toStdString().c_str());
+    }
+
+    reloadSources();
+}
+
 void MainWindow::clearProject()
 {
     ui->boxConfigurations->clear();
@@ -378,65 +430,67 @@ void MainWindow::reloadProject()
 
     //// Files =================================================================
 
-    //// Source files ----------------------------------------------------------
+    reloadSources();
 
-    if (mProjects[currentIndex].c_sources().size() > 0)
-    {
-        QTreeWidgetItem* root = new QTreeWidgetItem();
+//    //// Source files ----------------------------------------------------------
 
-        root->setText(0, QString::fromUtf8("Sources"));
+//    if (mProjects[currentIndex].c_sources().size() > 0)
+//    {
+//        QTreeWidgetItem* root = new QTreeWidgetItem();
 
-        for(const std::string& source : mProjects[currentIndex].c_sources())
-        {
-            QTreeWidgetItem* item = new QTreeWidgetItem();
+//        root->setText(0, QString::fromUtf8("Sources"));
 
-            item->setText(0, mProjectCodec->toUnicode(source.c_str()));
+//        for(const std::string& source : mProjects[currentIndex].c_sources())
+//        {
+//            QTreeWidgetItem* item = new QTreeWidgetItem();
 
-            root->addChild(item);
-        }
+//            item->setText(0, mProjectCodec->toUnicode(source.c_str()));
 
-        ui->treeSources->addTopLevelItem(root);
-    }
+//            root->addChild(item);
+//        }
 
-    //// Libraries files -------------------------------------------------------
+//        ui->treeSources->addTopLevelItem(root);
+//    }
 
-    if (mProjects[currentIndex].c_libraries().size() > 0)
-    {
-        QTreeWidgetItem* root = new QTreeWidgetItem();
+//    //// Libraries files -------------------------------------------------------
 
-        root->setText(0, QString::fromUtf8("Libraries"));
+//    if (mProjects[currentIndex].c_libraries().size() > 0)
+//    {
+//        QTreeWidgetItem* root = new QTreeWidgetItem();
 
-        for(const std::string& file : mProjects[currentIndex].c_libraries())
-        {
-            QTreeWidgetItem* item = new QTreeWidgetItem();
+//        root->setText(0, QString::fromUtf8("Libraries"));
 
-            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
+//        for(const std::string& file : mProjects[currentIndex].c_libraries())
+//        {
+//            QTreeWidgetItem* item = new QTreeWidgetItem();
 
-            root->addChild(item);
-        }
+//            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
 
-        ui->treeSources->addTopLevelItem(root);
-    }
+//            root->addChild(item);
+//        }
 
-    //// Command files ---------------------------------------------------------
+//        ui->treeSources->addTopLevelItem(root);
+//    }
 
-    if (mProjects[currentIndex].c_commands().size() > 0)
-    {
-        QTreeWidgetItem* root = new QTreeWidgetItem();
+//    //// Command files ---------------------------------------------------------
 
-        root->setText(0, QString::fromUtf8("Command"));
+//    if (mProjects[currentIndex].c_commands().size() > 0)
+//    {
+//        QTreeWidgetItem* root = new QTreeWidgetItem();
 
-        for(const std::string& file : mProjects[currentIndex].c_commands())
-        {
-            QTreeWidgetItem* item = new QTreeWidgetItem();
+//        root->setText(0, QString::fromUtf8("Command"));
 
-            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
+//        for(const std::string& file : mProjects[currentIndex].c_commands())
+//        {
+//            QTreeWidgetItem* item = new QTreeWidgetItem();
 
-            root->addChild(item);
-        }
+//            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
 
-        ui->treeSources->addTopLevelItem(root);
-    }
+//            root->addChild(item);
+//        }
+
+//        ui->treeSources->addTopLevelItem(root);
+//    }
 
     //// General settings ======================================================
 
@@ -738,13 +792,47 @@ void MainWindow::updateToolsTabs()
     }
 }
 
+void MainWindow::reloadSources()
+{
+    int projectIndex = ui->boxProjects->currentIndex();
 
+    if (projectIndex < 0)
+    {
+        return;
+    }
 
+    ProjectSettings& project = mProjects[projectIndex];
 
+    QList< QPair<std::string, stringset> > sources;
 
+    sources << qMakePair(std::string("Sources"),   project.sources());
+    sources << qMakePair(std::string("Libraries"), project.libraries());
+    sources << qMakePair(std::string("Commands"),  project.commands());
 
+    ui->treeSources->clear();
 
+    foreach (const auto& src, sources)
+    {
+        if (not src.second.empty())
+        {
+            QTreeWidgetItem* root = new QTreeWidgetItem();
 
+            root->setText(0, QString::fromUtf8(src.first.c_str()));
+
+            for(const std::string& source : src.second)
+            {
+                QTreeWidgetItem* item = new QTreeWidgetItem();
+
+                item->setText(0, mProjectCodec->toUnicode(source.c_str()));
+
+                root->addChild(item);
+            }
+
+            ui->treeSources->addTopLevelItem(root);
+        }
+    }
+
+}
 
 
 

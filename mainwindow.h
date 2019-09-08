@@ -34,6 +34,8 @@ private slots:
 
     void on_boxProjectType_activated(int index);
 
+    void on_editCpuFamily_activated(const QString &cpuFamily);
+
     void on_boxProjects_currentIndexChanged(int index);
 
     void on_boxConfigurations_currentIndexChanged(int index);
@@ -46,7 +48,9 @@ private slots:
 
     void on_buttonConfigurationRemove_clicked();
 
+    void on_buttonAddSource_clicked();
 
+    void on_buttonRemoveSource_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -71,6 +75,8 @@ private:
     void reloadProjectSettings();
 
     void updateToolsTabs();
+
+    void reloadSources();
 };
 
 #endif // MAINWINDOW_H
