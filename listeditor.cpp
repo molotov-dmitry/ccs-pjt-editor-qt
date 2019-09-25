@@ -9,6 +9,8 @@ ListEditor::ListEditor(QWidget *parent) :
     mSeparator(';')
 {
     ui->setupUi(this);
+
+    connect(ui->edit, SIGNAL(textChanged(QString)), this, SIGNAL(listUpdated()));
 }
 
 ListEditor::~ListEditor()
@@ -24,6 +26,16 @@ void ListEditor::setText(const QString &text)
 QString ListEditor::text() const
 {
     return ui->edit->text();
+}
+
+QStringList ListEditor::items() const
+{
+    return text().split(mSeparator);
+}
+
+void ListEditor::setItems(const QStringList& items)
+{
+    setText(items.join(mSeparator));
 }
 
 void ListEditor::clear()

@@ -144,7 +144,8 @@
              <string>+</string>
             </property>
             <property name="icon">
-             <iconset theme="add"/>
+             <iconset theme="add">
+              <normaloff>.</normaloff>.</iconset>
             </property>
            </widget>
           </item>
@@ -160,7 +161,8 @@
              <string>-</string>
             </property>
             <property name="icon">
-             <iconset theme="remove"/>
+             <iconset theme="remove">
+              <normaloff>.</normaloff>.</iconset>
             </property>
            </widget>
           </item>
@@ -187,7 +189,7 @@
          <item>
           <widget class="QTabWidget" name="tabProjectSettings">
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="tab">
             <attribute name="title">
@@ -553,7 +555,7 @@
      <x>0</x>
      <y>0</y>
      <width>1089</width>
-     <height>29</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

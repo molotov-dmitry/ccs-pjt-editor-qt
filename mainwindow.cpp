@@ -14,7 +14,9 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mCurrentProject(nullptr),
+    mCurrentConfig(nullptr)
 {
     ui->setupUi(this);
 
@@ -207,6 +209,8 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
         ui->action_save->setEnabled(true);
         ui->action_save_as->setEnabled(true);
 
+        mCurrentProject = &mProjects[index];
+
         reloadProject();
         reloadProjectSettings();
     }
@@ -398,8 +402,105 @@ void MainWindow::on_buttonRemoveSource_clicked()
     reloadSources();
 }
 
+void MainWindow::on_editCompilerIncludePaths_listUpdated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearIncludePaths();
+
+    foreach (const QString& option, ui->editCompilerIncludePaths->items())
+    {
+        mCurrentConfig->addIncludePath(option.toStdString());
+    }
+}
+
+void MainWindow::on_editCompilerDefines_listUpdated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearDefines();
+
+    foreach (const QString& option, ui->editCompilerDefines->items())
+    {
+        mCurrentConfig->addDefine(option.toStdString());
+    }
+}
+
+void MainWindow::on_editCompilerUndefines_listUpdated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearUndefines();
+
+    foreach (const QString& option, ui->editCompilerUndefines->items())
+    {
+        mCurrentConfig->addUndefine(option.toStdString());
+    }
+}
+
+void MainWindow::on_editCompilerOtherOptions_listUpdated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearCompilerOptions();
+
+    if (ui->checkFullSymbolicDebug->isChecked())
+    {
+        mCurrentConfig->addOtherCompilerOption("-g");
+    }
+
+    if (ui->checkMh->isChecked())
+    {
+        int value = ui->editMh->value();
+
+        mCurrentConfig->addOtherCompilerOption(string_format("-mh%d", value));
+    }
+
+    if (ui->checkMi->isChecked())
+    {
+        int value = ui->editMi->value();
+
+        mCurrentConfig->addOtherCompilerOption(string_format("-mi%d", value));
+    }
+
+    if (ui->checkMv->isChecked())
+    {
+        std::string value = ui->editMv->currentText().toStdString();
+
+        mCurrentConfig->addOtherCompilerOption(string_format("-mv%s", value.c_str()));
+    }
+
+    if (ui->checkDataAccessModel->isChecked())
+    {
+        std::string value = ui->editCompilerDataAccessModel->currentText().toStdString();
+
+        mCurrentConfig->addOtherCompilerOption(string_format("--mem_model:data=%s", value.c_str()));
+    }
+
+    foreach (const QString& option, ui->editCompilerOtherOptions->items())
+    {
+        mCurrentConfig->addOtherCompilerOption(option.toStdString());
+    }
+}
+
 void MainWindow::clearProject()
 {
+    mCurrentProject = nullptr;
+
+    //// Clear configurations combobox =========================================
+
     ui->boxConfigurations->clear();
 
     //// General settings ======================================================
@@ -410,16 +511,20 @@ void MainWindow::clearProject()
 
 void MainWindow::reloadProject()
 {
+    mCurrentProject = nullptr;
+
     if (ui->boxProjects->currentIndex() < 0)
     {
         return;
     }
 
+    clearProject();
+
     int currentIndex = ui->boxProjects->currentIndex();
 
-    const ProjectSettings& settings = mProjects.at(ui->boxProjects->currentIndex());
+    mCurrentProject = &mProjects[ui->boxProjects->currentIndex()];
 
-    clearProject();
+    const ProjectSettings& settings = *mCurrentProject;
 
     //// Configurations ========================================================
 
@@ -431,66 +536,6 @@ void MainWindow::reloadProject()
     //// Files =================================================================
 
     reloadSources();
-
-//    //// Source files ----------------------------------------------------------
-
-//    if (mProjects[currentIndex].c_sources().size() > 0)
-//    {
-//        QTreeWidgetItem* root = new QTreeWidgetItem();
-
-//        root->setText(0, QString::fromUtf8("Sources"));
-
-//        for(const std::string& source : mProjects[currentIndex].c_sources())
-//        {
-//            QTreeWidgetItem* item = new QTreeWidgetItem();
-
-//            item->setText(0, mProjectCodec->toUnicode(source.c_str()));
-
-//            root->addChild(item);
-//        }
-
-//        ui->treeSources->addTopLevelItem(root);
-//    }
-
-//    //// Libraries files -------------------------------------------------------
-
-//    if (mProjects[currentIndex].c_libraries().size() > 0)
-//    {
-//        QTreeWidgetItem* root = new QTreeWidgetItem();
-
-//        root->setText(0, QString::fromUtf8("Libraries"));
-
-//        for(const std::string& file : mProjects[currentIndex].c_libraries())
-//        {
-//            QTreeWidgetItem* item = new QTreeWidgetItem();
-
-//            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
-
-//            root->addChild(item);
-//        }
-
-//        ui->treeSources->addTopLevelItem(root);
-//    }
-
-//    //// Command files ---------------------------------------------------------
-
-//    if (mProjects[currentIndex].c_commands().size() > 0)
-//    {
-//        QTreeWidgetItem* root = new QTreeWidgetItem();
-
-//        root->setText(0, QString::fromUtf8("Command"));
-
-//        for(const std::string& file : mProjects[currentIndex].c_commands())
-//        {
-//            QTreeWidgetItem* item = new QTreeWidgetItem();
-
-//            item->setText(0, mProjectCodec->toUnicode(file.c_str()));
-
-//            root->addChild(item);
-//        }
-
-//        ui->treeSources->addTopLevelItem(root);
-//    }
 
     //// General settings ======================================================
 
@@ -514,6 +559,7 @@ void MainWindow::reloadProject()
 
 void MainWindow::clearProjectSettings()
 {
+    mCurrentConfig = nullptr;
 
     //// Build steps ===========================================================
 
@@ -587,6 +633,8 @@ static bool isIntConfig(const std::string& line, const char* option, int& value)
 
 void MainWindow::reloadProjectSettings()
 {
+    mCurrentConfig = nullptr;
+
     int currentTab = ui->tabProjectSettings->currentIndex();
 
     clearProjectSettings();
@@ -601,9 +649,11 @@ void MainWindow::reloadProjectSettings()
         return;
     }
 
-    const ProjectSettings& settings = mProjects.at(ui->boxProjects->currentIndex());
+    ProjectSettings& settings = mProjects[ui->boxProjects->currentIndex()];
     const std::string config = ui->boxConfigurations->currentText().toStdString();
     ConfigSettings configSettings = settings.configSettings(config.c_str());
+
+    mCurrentConfig = &settings.configSettingsRef(config.c_str());
 
     //// Build steps ===========================================================
 

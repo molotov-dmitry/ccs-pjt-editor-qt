@@ -52,6 +52,11 @@ private slots:
 
     void on_buttonRemoveSource_clicked();
 
+    void on_editCompilerIncludePaths_listUpdated();
+    void on_editCompilerDefines_listUpdated();
+    void on_editCompilerUndefines_listUpdated();
+    void on_editCompilerOtherOptions_listUpdated();
+
 private:
     Ui::MainWindow *ui;
 
@@ -68,6 +73,9 @@ private:
 
     QVector <QString>         mProjectPaths;
     QVector <ProjectSettings> mProjects;
+
+    ProjectSettings*          mCurrentProject;
+    ConfigSettings*           mCurrentConfig;
 
     void clearProject();
     void reloadProject();

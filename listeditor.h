@@ -18,6 +18,9 @@ public:
     void setText(const QString& text);
     QString text() const;
 
+    QStringList items() const;
+    void setItems(const QStringList& items);
+
     void clear();
 
     void setDragEnabled(bool enabled);
@@ -34,6 +37,10 @@ public:
 
     void setSeparator(QChar sep);
     QChar separator() const;
+
+signals:
+
+    void listUpdated();
 
 private slots:
     void on_buttonEditAsList_clicked();
