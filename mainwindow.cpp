@@ -28,6 +28,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
     on_boxProjects_currentIndexChanged(ui->boxProjects->currentIndex());
     on_boxConfigurations_currentIndexChanged(ui->boxConfigurations->currentIndex());
+
+    connect(ui->editCompilerOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateOtherCompilerOptions()));
+
+    connect(ui->checkFullSymbolicDebug, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->checkDataAccessModel, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->checkMh, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->checkMi, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->checkMv, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+
+    connect(ui->editCompilerDataAccessModel, SIGNAL(currentTextChanged(QString)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->editMh, SIGNAL(valueChanged(int)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->editMi, SIGNAL(valueChanged(int)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->editMv, SIGNAL(currentTextChanged(QString)), this, SLOT(updateOtherCompilerOptions()));
+
+    connect(ui->editLinkerOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateLinkerOptions()));
+
+    connect(ui->checkLinkerAbsoluteExecutable, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+    connect(ui->checkLinkerRomAutoinitModel, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+    connect(ui->checkLinkerUnspecifiedSectionsWarning, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+    connect(ui->checkLinkerRereadLibraries, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+
+    connect(ui->editArchiverOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateArchiverOptions()));
 }
 
 MainWindow::~MainWindow()
@@ -447,7 +469,7 @@ void MainWindow::on_editCompilerUndefines_listUpdated()
     }
 }
 
-void MainWindow::on_editCompilerOtherOptions_listUpdated()
+void MainWindow::updateOtherCompilerOptions()
 {
     if (mCurrentConfig == nullptr)
     {
@@ -492,6 +514,56 @@ void MainWindow::on_editCompilerOtherOptions_listUpdated()
     foreach (const QString& option, ui->editCompilerOtherOptions->items())
     {
         mCurrentConfig->addOtherCompilerOption(option.toStdString());
+    }
+}
+
+void MainWindow::updateLinkerOptions()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearLinkerOptions();
+
+    if (ui->checkLinkerAbsoluteExecutable->isChecked())
+    {
+        mCurrentConfig->addLinkerOption("-a");
+    }
+
+    if (ui->checkLinkerRomAutoinitModel->isChecked())
+    {
+        mCurrentConfig->addLinkerOption("-c");
+    }
+
+    if (ui->checkLinkerUnspecifiedSectionsWarning->isChecked())
+    {
+        mCurrentConfig->addLinkerOption("-w");
+    }
+
+    if (ui->checkLinkerRereadLibraries->isChecked())
+    {
+        mCurrentConfig->addLinkerOption("-x");
+    }
+
+    foreach (const QString& option, ui->editLinkerOtherOptions->items())
+    {
+        mCurrentConfig->addLinkerOption(option.toStdString().c_str());
+    }
+}
+
+void MainWindow::updateArchiverOptions()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearArchiverOptions();
+
+    foreach (const QString& option, ui->editArchiverOtherOptions->items())
+    {
+        mCurrentConfig->addArchiverOption(option.toStdString().c_str());
     }
 }
 

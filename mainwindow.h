@@ -55,7 +55,10 @@ private slots:
     void on_editCompilerIncludePaths_listUpdated();
     void on_editCompilerDefines_listUpdated();
     void on_editCompilerUndefines_listUpdated();
-    void on_editCompilerOtherOptions_listUpdated();
+
+    void updateOtherCompilerOptions();
+    void updateLinkerOptions();
+    void updateArchiverOptions();
 
 private:
     Ui::MainWindow *ui;
