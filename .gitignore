@@ -2,3 +2,4 @@
 /build
 .qmake.stash
 ccs-pjt-editor-qt
+Makefile
