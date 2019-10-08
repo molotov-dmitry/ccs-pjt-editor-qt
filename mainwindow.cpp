@@ -178,35 +178,41 @@ void MainWindow::on_boxProjectType_currentIndexChanged(int index)
 
 void MainWindow::on_boxProjectType_activated(int index)
 {
-    int currentIndex = ui->boxProjects->currentIndex();
-
-    ProjectSettings::Type projectType = ProjectSettings::Type::UNKNOWN;
+    if (mCurrentProject == nullptr)
+    {
+        return;
+    }
 
     switch (index)
     {
     case ProjectSettings::PROJECT_EXECUTABLE:
 
-        projectType = ProjectSettings::Type::EXECUTABLE;
+        mCurrentProject->removeTool("Archiver");
+        mCurrentProject->addTool("Compiler");
+        mCurrentProject->addTool("Linker");
+
+        mCurrentProject->setProjectType(ProjectSettings::Type::EXECUTABLE);
 
         break;
 
     case ProjectSettings::PROJECT_LIBRARY:
-        projectType = ProjectSettings::Type::LIBRARY;
+
+        mCurrentProject->removeTool("Linker");
+        mCurrentProject->addTool("Compiler");
+        mCurrentProject->addTool("Archiver");
+
+        mCurrentProject->setProjectType(ProjectSettings::Type::EXECUTABLE);
 
         break;
 
     case ProjectSettings::PROJECT_UNKNOWN:
     default:
 
-        projectType = ProjectSettings::Type::UNKNOWN;
-
         break;
     }
 
-    if (currentIndex >= 0)
-    {
-        mProjects[currentIndex].setProjectType(projectType);
-    }
+    updateToolsTabs();
+
 }
 
 void MainWindow::on_editCpuFamily_activated(const QString &cpuFamily)
@@ -243,6 +249,8 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
         reloadProject();
         reloadProjectSettings();
     }
+
+    updateToolsTabs();
 }
 
 void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
@@ -910,44 +918,17 @@ void MainWindow::reloadProjectSettings()
 
 void MainWindow::updateToolsTabs()
 {
-    int index = ui->boxProjectType->currentIndex();
-
-    if (ui->boxProjects->currentIndex() < 0)
+    if (mCurrentProject != nullptr)
     {
-        index = -1;
-    }
+        uint32_t flags = mCurrentProject->toolFlags();
+        bool haveCompiler = (flags & ProjectSettings::TOOL_COMPILER) != 0;
+        bool haveLinker   = (flags & ProjectSettings::TOOL_LINKER) != 0;
+        bool haveArchiver = (flags & ProjectSettings::TOOL_ARCHIVER) != 0;
 
-    if (ui->boxConfigurations->currentIndex() < 0)
-    {
-        index = -1;
-    }
-
-    switch (index)
-    {
-    case ProjectSettings::PROJECT_EXECUTABLE:
         ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
-
-        break;
-
-    case ProjectSettings::PROJECT_LIBRARY:
-        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, true);
-        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, true);
-
-        break;
-
-    case ProjectSettings::PROJECT_UNKNOWN:
-    default:
-        ui->tabProjectSettings->setTabEnabled(TAB_BUILD_STEPS, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_LINKER, false);
-        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER, false);
-
-        break;
+        ui->tabProjectSettings->setTabEnabled(TAB_COMPILER,    haveCompiler);
+        ui->tabProjectSettings->setTabEnabled(TAB_LINKER,      haveLinker);
+        ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER,    haveArchiver);
     }
 }
 
