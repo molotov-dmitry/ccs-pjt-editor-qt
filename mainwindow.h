@@ -21,13 +21,13 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void openProject(const QString& path);
+
 private slots:
+
     void on_action_open_triggered();
-
     void on_action_new_triggered();
-
     void on_action_save_triggered();
-
     void on_action_save_as_triggered();
 
     void on_boxProjectType_currentIndexChanged(int index);

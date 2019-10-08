@@ -57,18 +57,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_action_open_triggered()
+void MainWindow::openProject(const QString& path)
 {
-    QString path = QFileDialog::getOpenFileName(this,
-                                                QString::fromUtf8("Открыть проект"),
-                                                QString(),
-                                                QString("*.pjt"));
-
-    if (path.isEmpty())
-    {
-        return;
-    }
-
     QFileInfo fileInfo(path);
 
     ProjectReader reader(path.toStdString().c_str());
@@ -86,6 +76,23 @@ void MainWindow::on_action_open_triggered()
     mProjectPaths.append(path);
 
     ui->boxProjects->addItem(fileInfo.fileName());
+
+    ui->boxProjects->setCurrentIndex(ui->boxProjects->count() - 1);
+}
+
+void MainWindow::on_action_open_triggered()
+{
+    QString path = QFileDialog::getOpenFileName(this,
+                                                QString::fromUtf8("Открыть проект"),
+                                                QString(),
+                                                QString("*.pjt"));
+
+    if (path.isEmpty())
+    {
+        return;
+    }
+
+    openProject(path);
 }
 
 void MainWindow::on_action_new_triggered()
