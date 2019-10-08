@@ -60,6 +60,9 @@ private slots:
     void updateLinkerOptions();
     void updateArchiverOptions();
 
+    void on_widgetPreBuildSteps_updated();
+    void on_widgetPostBuildSteps_updated();
+
 private:
     Ui::MainWindow *ui;
 

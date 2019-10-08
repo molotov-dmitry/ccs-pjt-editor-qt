@@ -574,6 +574,36 @@ void MainWindow::updateArchiverOptions()
     }
 }
 
+void MainWindow::on_widgetPreBuildSteps_updated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearPreBuildSteps();
+
+    foreach (const auto& step, ui->widgetPreBuildSteps->buildSteps())
+    {
+        mCurrentConfig->addPreBuildStep(mProjectCodec->fromUnicode(step.first));
+    }
+}
+
+void MainWindow::on_widgetPostBuildSteps_updated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearPostBuildSteps();
+
+    foreach (const auto& step, ui->widgetPostBuildSteps->buildSteps())
+    {
+        mCurrentConfig->addPostBuildStep(mProjectCodec->fromUnicode(step.first));
+    }
+}
+
 void MainWindow::clearProject()
 {
     mCurrentProject = nullptr;
