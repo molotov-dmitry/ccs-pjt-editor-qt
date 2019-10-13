@@ -43,7 +43,8 @@ SOURCES += \
     buildstepslist.cpp \
     dialogconfigurationrename.cpp \
     parser/export/abstractprojectexport.cpp \
-    parser/export/projectexportccs3.cpp
+    parser/export/projectexportccs3.cpp \
+    parser/buildstep.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -58,7 +59,8 @@ HEADERS += \
     buildstepslist.h \
     dialogconfigurationrename.h \
     parser/export/abstractprojectexport.h \
-    parser/export/projectexportccs3.h
+    parser/export/projectexportccs3.h \
+    parser/buildstep.h
 
 FORMS += \
         mainwindow.ui \

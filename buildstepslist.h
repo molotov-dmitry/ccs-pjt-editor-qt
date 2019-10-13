@@ -6,14 +6,6 @@
 #include <QList>
 #include <QPair>
 
-enum BuildCondition
-{
-    BUILD_IF_ANY_FILE_BUILDS,
-    BUILD_ALWAYS,
-
-    BUILD_CONDITION_COUNT
-};
-
 class QTreeWidgetItem;
 
 namespace Ui {
@@ -29,7 +21,7 @@ public:
     ~BuildStepsList();
 
     void clear();
-    void addBuildStep(const QString& command, BuildCondition condition);
+    void addBuildStep(const QString& command, int condition);
 
     QList< QPair<QString, int> > buildSteps() const;
 

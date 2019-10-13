@@ -592,8 +592,10 @@ void MainWindow::on_widgetPreBuildSteps_updated()
     mCurrentConfig->clearPreBuildSteps();
 
     foreach (const auto& step, ui->widgetPreBuildSteps->buildSteps())
-    {
-        mCurrentConfig->addPreBuildStep(mProjectCodec->fromUnicode(step.first));
+    {   
+        std::string cmd = mProjectCodec->fromUnicode(step.first).toStdString();
+
+        mCurrentConfig->addPreBuildStep(cmd, step.second);
     }
 }
 
@@ -608,7 +610,9 @@ void MainWindow::on_widgetPostBuildSteps_updated()
 
     foreach (const auto& step, ui->widgetPostBuildSteps->buildSteps())
     {
-        mCurrentConfig->addPostBuildStep(mProjectCodec->fromUnicode(step.first));
+        std::string cmd = mProjectCodec->fromUnicode(step.first).toStdString();
+
+        mCurrentConfig->addPostBuildStep(cmd, step.second);
     }
 }
 
@@ -774,16 +778,16 @@ void MainWindow::reloadProjectSettings()
 
     //// Build steps ===========================================================
 
-    for (const std::string& preBuildStep : configSettings.preBuildSteps())
+    for (const BuildStep& step : configSettings.preBuildSteps())
     {
-        ui->widgetPreBuildSteps->addBuildStep(mProjectCodec->toUnicode(preBuildStep.c_str()),
-                                              BUILD_IF_ANY_FILE_BUILDS);
+        ui->widgetPreBuildSteps->addBuildStep(mProjectCodec->toUnicode(step.command().c_str()),
+                                              step.condition());
     }
 
-    for (const std::string& postBuildStep : configSettings.postBuildSteps())
+    for (const BuildStep& step : configSettings.postBuildSteps())
     {
-        ui->widgetPostBuildSteps->addBuildStep(mProjectCodec->toUnicode(postBuildStep.c_str()),
-                                               BUILD_IF_ANY_FILE_BUILDS);
+        ui->widgetPostBuildSteps->addBuildStep(mProjectCodec->toUnicode(step.command().c_str()),
+                                               step.condition());
     }
 
     //// Compiler ==============================================================
