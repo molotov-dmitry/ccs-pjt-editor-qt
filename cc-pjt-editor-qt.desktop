@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=ccs-pjt-editor-qt %F
+Name=CCS Project editor
+GenericName=Project editor for CCS 3.* project files
+X-KDE-StartupNotify=true
+Icon=cpu
+Terminal=false
+Categories=Development;IDE
+MimeType= text/x-ccs-pjt

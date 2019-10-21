@@ -71,3 +71,8 @@ FORMS += \
 
 unix: target.path = /usr/local/bin
 !isEmpty(target.path): INSTALLS += target
+
+unix: desktop.path = /usr/share/applications
+unix: desktop.files = cc-pjt-editor-qt.desktop
+
+!isEmpty(desktop.path): INSTALLS += desktop
