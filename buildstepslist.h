@@ -42,6 +42,9 @@ private slots:
     void on_buttonAdd_clicked();
     void on_buttonRemove_clicked();
 
+    void on_buttonMoveUp_clicked();
+    void on_buttonMoveDown_clicked();
+    void on_tree_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 };
 
 #endif // BUILDSTEPSLIST_H

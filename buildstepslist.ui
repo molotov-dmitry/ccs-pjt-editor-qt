@@ -11,15 +11,7 @@
    </rect>
   </property>
   <layout class="QGridLayout">
-   <item row="1" column="1">
-    <widget class="QToolButton" name="buttonRemove">
-     <property name="icon">
-      <iconset theme="remove">
-       <normaloff>.</normaloff>.</iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
+   <item row="5" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -32,15 +24,7 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
-    <widget class="QToolButton" name="buttonAdd">
-     <property name="icon">
-      <iconset theme="add">
-       <normaloff>.</normaloff>.</iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" rowspan="3">
+   <item row="0" column="0" rowspan="6">
     <widget class="QTreeWidget" name="tree">
      <property name="dragDropMode">
       <enum>QAbstractItemView::InternalMove</enum>
@@ -64,6 +48,67 @@
        <string>Command</string>
       </property>
      </column>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QToolButton" name="buttonMoveUp">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="icon">
+      <iconset theme="up"/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QToolButton" name="buttonRemove">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="icon">
+      <iconset theme="remove">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QToolButton" name="buttonAdd">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="icon">
+      <iconset theme="add">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QToolButton" name="buttonMoveDown">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="icon">
+      <iconset theme="down"/>
+     </property>
     </widget>
    </item>
   </layout>

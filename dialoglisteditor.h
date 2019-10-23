@@ -7,6 +7,8 @@ namespace Ui {
 class DialogListEditor;
 }
 
+class QListWidgetItem;
+
 class DialogListEditor : public QDialog
 {
     Q_OBJECT
@@ -22,6 +24,14 @@ private slots:
     void on_buttonAdd_clicked();
 
     void on_buttonRemove_clicked();
+
+    void on_buttonMoveUp_clicked();
+
+    void on_buttonMoveDown_clicked();
+
+    void on_list_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
+    void on_list_itemSelectionChanged();
 
 private:
     Ui::DialogListEditor *ui;

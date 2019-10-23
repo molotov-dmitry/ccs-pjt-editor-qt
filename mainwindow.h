@@ -90,6 +90,7 @@ private:
     void reloadProjectSettings();
 
     void updateToolsTabs();
+    void updateWindowTitle();
 
     void reloadSources();
 };

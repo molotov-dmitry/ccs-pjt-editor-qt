@@ -21,6 +21,8 @@ BuildStepsList::BuildStepsList(QWidget *parent) :
     ui->tree->setItemDelegateForColumn(0, delegate);
 
     connect(ui->tree, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(updateCommand(QTreeWidgetItem *, int)));
+
+    on_tree_currentItemChanged(ui->tree->currentItem(), nullptr);
 }
 
 BuildStepsList::~BuildStepsList()
@@ -117,6 +119,8 @@ void BuildStepsList::on_buttonAdd_clicked()
 
     item->setSelected(true);
 
+    ui->tree->editItem(item, 1);
+
     emit updated();
 }
 
@@ -133,4 +137,46 @@ void BuildStepsList::on_buttonRemove_clicked()
     {
         emit updated();
     }
+}
+
+void BuildStepsList::on_buttonMoveUp_clicked()
+{
+    int index = ui->tree->indexOfTopLevelItem(ui->tree->currentItem());
+    if (index < 0)
+    {
+        return;
+    }
+
+    QTreeWidgetItem* item = ui->tree->takeTopLevelItem(index);
+
+    ui->tree->insertTopLevelItem(index - 1, item);
+
+    ui->tree->setCurrentItem(item);
+}
+
+void BuildStepsList::on_buttonMoveDown_clicked()
+{
+    int index = ui->tree->indexOfTopLevelItem(ui->tree->currentItem());
+    if (index < 0)
+    {
+        return;
+    }
+
+    QTreeWidgetItem* item = ui->tree->takeTopLevelItem(index);
+
+    ui->tree->insertTopLevelItem(index + 1, item);
+
+    ui->tree->setCurrentItem(item);
+}
+
+void BuildStepsList::on_tree_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+
+    ui->buttonRemove->setEnabled(current != nullptr);
+
+    int index = ui->tree->indexOfTopLevelItem(current);
+
+    ui->buttonMoveUp->setEnabled(index > 0);
+    ui->buttonMoveDown->setEnabled(index > -1 && index < ui->tree->topLevelItemCount() - 1);
 }

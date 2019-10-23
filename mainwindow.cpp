@@ -55,6 +55,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkLinkerRereadLibraries, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
 
     connect(ui->editArchiverOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateArchiverOptions()));
+
+    updateWindowTitle();
 }
 
 MainWindow::~MainWindow()
@@ -260,6 +262,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
     }
 
     updateToolsTabs();
+    updateWindowTitle();
 }
 
 void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
@@ -281,6 +284,7 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
     }
 
     updateToolsTabs();
+    updateWindowTitle();
 }
 
 void MainWindow::on_buttonConfigurationAdd_clicked()
@@ -956,6 +960,28 @@ void MainWindow::updateToolsTabs()
         ui->tabProjectSettings->setTabEnabled(TAB_LINKER,      haveLinker);
         ui->tabProjectSettings->setTabEnabled(TAB_ARCHIVER,    haveArchiver);
     }
+}
+
+void MainWindow::updateWindowTitle()
+{
+    QString title;
+
+    int currentIndex = ui->boxProjects->currentIndex();
+    if (currentIndex >= 0)
+    {
+        if (ui->boxConfigurations->currentIndex() >= 0)
+        {
+            title = ui->boxConfigurations->currentText() + " @ ";
+        }
+
+        title.append(ui->boxProjects->currentText());
+
+        title.append(" - ");
+    }
+
+    title.append("CCS project editor");
+
+    this->setWindowTitle(title);
 }
 
 void MainWindow::reloadSources()

@@ -1,6 +1,8 @@
 ﻿#include "listeditor.h"
 #include "ui_listeditor.h"
 
+#include <QFontDatabase>
+
 #include "dialoglisteditor.h"
 
 ListEditor::ListEditor(QWidget *parent) :
@@ -11,6 +13,8 @@ ListEditor::ListEditor(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->edit, SIGNAL(textChanged(QString)), this, SIGNAL(listUpdated()));
+
+    ui->edit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 }
 
 ListEditor::~ListEditor()
