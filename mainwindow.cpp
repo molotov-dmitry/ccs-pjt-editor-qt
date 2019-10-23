@@ -1050,5 +1050,10 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
         dialog.addUnordered(QString::fromStdString(src));
     }
 
+    for (const auto& src : mCurrentConfig->fileLinkOrder())
+    {
+        dialog.addOrdered(QString::fromStdString(src.first), (int)src.second);
+    }
+
     dialog.exec();
 }

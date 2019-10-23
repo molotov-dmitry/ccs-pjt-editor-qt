@@ -125,6 +125,7 @@ void DialogListEditor::on_buttonMoveDown_clicked()
 
 void DialogListEditor::on_list_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    Q_UNUSED(current);
     Q_UNUSED(previous);
 
     int index = ui->list->currentRow();
