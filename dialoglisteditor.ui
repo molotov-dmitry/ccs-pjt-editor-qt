@@ -47,8 +47,8 @@
    </item>
    <item row="0" column="0" rowspan="6">
     <widget class="QListWidget" name="list">
-     <property name="defaultDropAction">
-      <enum>Qt::MoveAction</enum>
+     <property name="dragDropMode">
+      <enum>QAbstractItemView::InternalMove</enum>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>

@@ -11,8 +11,7 @@ DialogListEditor::DialogListEditor(QWidget *parent) :
 
     ui->list->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
-    on_list_currentItemChanged(ui->list->currentItem(), nullptr);
-    on_list_itemSelectionChanged();
+    updateList();
 
     foreach (QAbstractButton* button, ui->buttonBox->buttons())
     {
@@ -21,6 +20,11 @@ DialogListEditor::DialogListEditor(QWidget *parent) :
             button->setMinimumHeight(32);
         }
     }
+
+    connect(ui->list->model(),
+            SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+            this,
+            SLOT(updateList()));
 }
 
 DialogListEditor::~DialogListEditor()
@@ -132,4 +136,10 @@ void DialogListEditor::on_list_currentItemChanged(QListWidgetItem *current, QLis
 void DialogListEditor::on_list_itemSelectionChanged()
 {
     ui->buttonRemove->setEnabled(not ui->list->selectedItems().isEmpty());
+}
+
+void DialogListEditor::updateList()
+{
+    on_list_currentItemChanged(ui->list->currentItem(), nullptr);
+    on_list_itemSelectionChanged();
 }

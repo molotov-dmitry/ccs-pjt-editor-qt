@@ -44,7 +44,8 @@ SOURCES += \
     dialogconfigurationrename.cpp \
     parser/export/abstractprojectexport.cpp \
     parser/export/projectexportccs3.cpp \
-    parser/buildstep.cpp
+    parser/buildstep.cpp \
+    dialoglinkordereditor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,14 +61,16 @@ HEADERS += \
     dialogconfigurationrename.h \
     parser/export/abstractprojectexport.h \
     parser/export/projectexportccs3.h \
-    parser/buildstep.h
+    parser/buildstep.h \
+    dialoglinkordereditor.h
 
 FORMS += \
         mainwindow.ui \
     listeditor.ui \
     dialoglisteditor.ui \
     buildstepslist.ui \
-    dialogconfigurationrename.ui
+    dialogconfigurationrename.ui \
+    dialoglinkordereditor.ui
 
 unix: target.path = /usr/local/bin
 !isEmpty(target.path): INSTALLS += target

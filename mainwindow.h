@@ -65,6 +65,8 @@ private slots:
 
     void on_buttonMenuExtra_clicked();
 
+    void on_buttonLinkerEditLinkOrder_clicked();
+
 private:
     Ui::MainWindow *ui;
 

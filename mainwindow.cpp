@@ -12,6 +12,7 @@
 #include "parser/utils.h"
 
 #include "dialogconfigurationrename.h"
+#include "dialoglinkordereditor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -1033,4 +1034,21 @@ void MainWindow::on_buttonMenuExtra_clicked()
     menu.addAction(ui->action_save_as);
 
     menu.exec(QCursor::pos());
+}
+
+void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
+{
+    if (mCurrentProject == nullptr || mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    DialogLinkOrderEditor dialog;
+
+    for (const std::string& src : mCurrentProject->sources())
+    {
+        dialog.addUnordered(QString::fromStdString(src));
+    }
+
+    dialog.exec();
 }

@@ -22,7 +22,14 @@ BuildStepsList::BuildStepsList(QWidget *parent) :
 
     connect(ui->tree, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(updateCommand(QTreeWidgetItem *, int)));
 
-    on_tree_currentItemChanged(ui->tree->currentItem(), nullptr);
+    connect(ui->tree->model(),
+            SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+            this,
+            SLOT(updateList()));
+
+    updateList();
+
+
 }
 
 BuildStepsList::~BuildStepsList()
@@ -179,4 +186,9 @@ void BuildStepsList::on_tree_currentItemChanged(QTreeWidgetItem *current, QTreeW
 
     ui->buttonMoveUp->setEnabled(index > 0);
     ui->buttonMoveDown->setEnabled(index > -1 && index < ui->tree->topLevelItemCount() - 1);
+}
+
+void BuildStepsList::updateList()
+{
+    on_tree_currentItemChanged(ui->tree->currentItem(), nullptr);
 }

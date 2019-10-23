@@ -33,6 +33,8 @@ private slots:
 
     void on_list_itemSelectionChanged();
 
+    void updateList();
+
 private:
     Ui::DialogListEditor *ui;
 };
