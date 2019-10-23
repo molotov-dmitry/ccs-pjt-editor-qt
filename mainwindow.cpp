@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QTextCodec>
 #include <QFontDatabase>
+#include <QMenu>
 
 #include "parser/projectreader.h"
 #include "parser/export/projectexportccs3.h"
@@ -28,6 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     on_boxProjects_currentIndexChanged(ui->boxProjects->currentIndex());
     on_boxConfigurations_currentIndexChanged(ui->boxConfigurations->currentIndex());
+
+    connect(ui->buttonProjectNew,  SIGNAL(clicked()), ui->action_new,  SLOT(trigger()));
+    connect(ui->buttonProjectOpen, SIGNAL(clicked()), ui->action_open, SLOT(trigger()));
+    connect(ui->buttonProjectSave, SIGNAL(clicked()), ui->action_save, SLOT(trigger()));
 
     connect(ui->editCompilerOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateOtherCompilerOptions()));
 
@@ -229,8 +234,10 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
 {
     if (index < 0)
     {
-        ui->tabProjectSettings->setEnabled(false);
+        ui->boxConfigurations->setEnabled(false);
         ui->boxConfigurations->clear();
+
+        ui->buttonConfigurationAdd->setEnabled(false);
 
         ui->action_save->setEnabled(false);
         ui->action_save_as->setEnabled(false);
@@ -239,7 +246,9 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
     }
     else
     {
-        ui->tabProjectSettings->setEnabled(true);
+        ui->boxConfigurations->setEnabled(true);
+
+        ui->buttonConfigurationAdd->setEnabled(true);
 
         ui->action_save->setEnabled(true);
         ui->action_save_as->setEnabled(true);
@@ -260,6 +269,7 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
         ui->buttonConfigurationCopy->setEnabled(false);
         ui->buttonConfigurationRename->setEnabled(false);
         ui->buttonConfigurationRemove->setEnabled(false);
+
         clearProjectSettings();
     }
     else
@@ -922,9 +932,21 @@ void MainWindow::reloadProjectSettings()
 
 void MainWindow::updateToolsTabs()
 {
+    ui->tabProject->setEnabled(mCurrentProject != nullptr);
+
+    if (mCurrentProject == nullptr || mCurrentConfig == nullptr)
+    {
+        ui->tabProjectSettings->setEnabled(false);
+    }
+    else
+    {
+        ui->tabProjectSettings->setEnabled(true);
+    }
+
     if (mCurrentProject != nullptr)
     {
         uint32_t flags = mCurrentProject->toolFlags();
+
         bool haveCompiler = (flags & ProjectSettings::TOOL_COMPILER) != 0;
         bool haveLinker   = (flags & ProjectSettings::TOOL_LINKER) != 0;
         bool haveArchiver = (flags & ProjectSettings::TOOL_ARCHIVER) != 0;
@@ -978,6 +1000,11 @@ void MainWindow::reloadSources()
 
 }
 
+void MainWindow::on_buttonMenuExtra_clicked()
+{
+    QMenu menu;
 
+    menu.addAction(ui->action_save_as);
 
-
+    menu.exec(QCursor::pos());
+}

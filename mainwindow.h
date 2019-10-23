@@ -63,12 +63,13 @@ private slots:
     void on_widgetPreBuildSteps_updated();
     void on_widgetPostBuildSteps_updated();
 
+    void on_buttonMenuExtra_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     enum SettingsTabs
     {
-        TAB_GENERAL,
         TAB_BUILD_STEPS,
         TAB_COMPILER,
         TAB_LINKER,
