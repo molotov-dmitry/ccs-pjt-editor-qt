@@ -36,12 +36,38 @@ void DialogLinkOrderEditor::addUnordered(const QString& file)
 
 void DialogLinkOrderEditor::addOrdered(const QString& file, int order)
 {
-    ui->listOrdered->insertItem(order, file);
+    int linkOrder = mOrderList.count() - 1;
+
+    for (int i = 0; i < mOrderList.count(); ++i)
+    {
+        if (order < mOrderList[i])
+        {
+            linkOrder = i;
+            break;
+        }
+    }
+
+    mOrderList.insert(linkOrder, order);
+
+    ui->listOrdered->insertItem(linkOrder, file);
 
     foreach (QListWidgetItem* item, ui->listUnordered->findItems(file, Qt::MatchExactly))
     {
         delete item;
     }
+}
+
+QStringList DialogLinkOrderEditor::order() const
+{
+    QStringList result;
+
+    for(int i = 0; i < ui->listOrdered->count(); ++i)
+    {
+        QString str = ui->listOrdered->item(i)->text();
+        result.append(str);
+    }
+
+    return result;
 }
 
 void DialogLinkOrderEditor::on_buttonAdd_clicked()

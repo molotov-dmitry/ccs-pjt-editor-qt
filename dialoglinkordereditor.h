@@ -3,6 +3,7 @@
 
 #include <QDialog>
 
+#include <QMap>
 #include <QAbstractItemModel>
 
 class QListWidget;
@@ -22,6 +23,8 @@ public:
 
     void addUnordered(const QString& file);
     void addOrdered(const QString& file, int order);
+
+    QStringList order() const;
 
 private slots:
     void on_buttonAdd_clicked();
@@ -44,6 +47,8 @@ private slots:
 
 private:
     Ui::DialogLinkOrderEditor *ui;
+
+    QList<int> mOrderList;
 
     void moveCurrentItem(QListWidget* from, QListWidget* to);
 };

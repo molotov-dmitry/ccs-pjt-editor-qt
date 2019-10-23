@@ -1052,8 +1052,20 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
 
     for (const auto& src : mCurrentConfig->fileLinkOrder())
     {
-        dialog.addOrdered(QString::fromStdString(src.first), (int)src.second);
+        dialog.addOrdered(QString::fromStdString(src.first), (int)src.second - 1);
     }
 
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        mCurrentConfig->clearFileLinkOrder();
+
+        QStringList newLinkOrder = dialog.order();
+
+        for (int i = 0; i < newLinkOrder.count(); ++i)
+        {
+            QString str = newLinkOrder.at(i);
+
+            mCurrentConfig->addFileLinkOrder(str.toStdString().c_str(), i + 1);
+        }
+    }
 }
