@@ -36,7 +36,7 @@ void DialogLinkOrderEditor::addUnordered(const QString& file)
 
 void DialogLinkOrderEditor::addOrdered(const QString& file, int order)
 {
-    int linkOrder = mOrderList.count() - 1;
+    int linkOrder = mOrderList.count();
 
     for (int i = 0; i < mOrderList.count(); ++i)
     {
