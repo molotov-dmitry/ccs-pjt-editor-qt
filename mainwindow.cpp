@@ -6,6 +6,8 @@
 #include <QTextCodec>
 #include <QFontDatabase>
 #include <QMenu>
+#include <QMimeDatabase>
+#include <QFileIconProvider>
 
 #include "parser/projectreader.h"
 #include "parser/export/projectexportccs3.h"
@@ -987,20 +989,19 @@ void MainWindow::updateWindowTitle()
 
 void MainWindow::reloadSources()
 {
-    int projectIndex = ui->boxProjects->currentIndex();
+    QFileIconProvider iconProvider;
+    QMimeDatabase     mimeDatabase;
 
-    if (projectIndex < 0)
+    if (mCurrentProject == nullptr)
     {
         return;
     }
 
-    ProjectSettings& project = mProjects[projectIndex];
+    QList< QPair<QString, stringset> > sources;
 
-    QList< QPair<std::string, stringset> > sources;
-
-    sources << qMakePair(std::string("Sources"),   project.sources());
-    sources << qMakePair(std::string("Libraries"), project.libraries());
-    sources << qMakePair(std::string("Commands"),  project.commands());
+    sources << qMakePair(QString("Sources"),   mCurrentProject->sources());
+    sources << qMakePair(QString("Libraries"), mCurrentProject->libraries());
+    sources << qMakePair(QString("Commands"),  mCurrentProject->commands());
 
     ui->treeSources->clear();
 
@@ -1010,18 +1011,35 @@ void MainWindow::reloadSources()
         {
             QTreeWidgetItem* root = new QTreeWidgetItem();
 
-            root->setText(0, QString::fromUtf8(src.first.c_str()));
+            root->setText(0, src.first);
+            root->setIcon(0, iconProvider.icon(QFileIconProvider::Folder));
 
             for(const std::string& source : src.second)
             {
                 QTreeWidgetItem* item = new QTreeWidgetItem();
 
-                item->setText(0, mProjectCodec->toUnicode(source.c_str()));
+                QString name = mProjectCodec->toUnicode(source.c_str());
+                QMimeType type = mimeDatabase.mimeTypeForFile(name);
+
+                item->setText(0, name);
+                item->setIcon(0, QIcon::fromTheme(type.iconName()));
+
+                if (mCurrentConfig != nullptr)
+                {
+                    if (not mCurrentConfig->fileOptions(source).isDefault())
+                    {
+                        QFont font = ui->treeSources->font();
+                        font.setBold(true);
+                        item->setFont(0, font);
+                    }
+                }
 
                 root->addChild(item);
             }
 
             ui->treeSources->addTopLevelItem(root);
+
+            ui->treeSources->expandItem(root);
         }
     }
 
@@ -1071,5 +1089,7 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
 
             mCurrentConfig->file(str.toStdString()).setLinkOrder(i + 1);
         }
+
+        reloadSources();
     }
 }
