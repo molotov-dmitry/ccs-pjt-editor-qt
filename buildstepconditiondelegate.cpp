@@ -6,9 +6,19 @@
 
 #include "parser/buildstep.h"
 
-BuildStepConditionDelegate::BuildStepConditionDelegate(QObject *parent) : QItemDelegate(parent)
+BuildStepConditionDelegate::BuildStepConditionDelegate(QObject *parent) : QItemDelegate(parent), mIsFile(false)
 {
 
+}
+
+bool BuildStepConditionDelegate::isIsFileCondition() const
+{
+    return mIsFile;
+}
+
+void BuildStepConditionDelegate::setIsFileCondition(bool fileCondition)
+{
+    mIsFile = fileCondition;
 }
 
 QWidget *BuildStepConditionDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -19,7 +29,7 @@ QWidget *BuildStepConditionDelegate::createEditor(QWidget *parent, const QStyleO
 
     for (int i = 0; i < BuildStep::BUILD_CONDITION_COUNT; ++i)
     {
-        editor->addItem(buildStepConditionString(i));
+        editor->addItem(buildStepConditionString(i, mIsFile));
     }
 
     setEditorData(editor, index);
@@ -47,19 +57,9 @@ void BuildStepConditionDelegate::setModelData(QWidget *editor, QAbstractItemMode
 
 }
 
-QString BuildStepConditionDelegate::buildStepConditionString(int condition)
+QString BuildStepConditionDelegate::buildStepConditionString(int condition, bool file)
 {
-    switch (condition)
-    {
-    case BuildStep::IF_ANY_FILE_BUILDS:
-        return QString::fromUtf8("If any file builds");
-
-    case BuildStep::ALWAYS:
-        return QString::fromUtf8("Always");
-
-    default:
-        return QString();
-    }
+    return QString::fromStdString(BuildStep::buildConditionString(condition, file));
 }
 
 void BuildStepConditionDelegate::changeIndex(int)

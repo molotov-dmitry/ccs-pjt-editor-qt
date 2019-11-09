@@ -10,15 +10,16 @@
 
 BuildStepsList::BuildStepsList(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::BuildStepsList)
+    ui(new Ui::BuildStepsList),
+    mDelegate(nullptr)
 {
     ui->setupUi(this);
 
     ui->tree->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 
-    BuildStepConditionDelegate* delegate = new BuildStepConditionDelegate(this);
+    mDelegate = new BuildStepConditionDelegate(this);
 
-    ui->tree->setItemDelegateForColumn(0, delegate);
+    ui->tree->setItemDelegateForColumn(0, mDelegate);
 
     connect(ui->tree, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(updateCommand(QTreeWidgetItem *, int)));
 
@@ -37,6 +38,16 @@ BuildStepsList::~BuildStepsList()
     delete ui;
 }
 
+bool BuildStepsList::isFile()
+{
+    return mDelegate->isIsFileCondition();
+}
+
+void BuildStepsList::setIsFile(bool isFile)
+{
+    mDelegate->setIsFileCondition(isFile);
+}
+
 void BuildStepsList::clear()
 {
     ui->tree->clear();
@@ -53,7 +64,7 @@ void BuildStepsList::addBuildStep(const QString &command, int condition)
 
     item->setText(1, command);
     item->setData(0, Qt::UserRole + 1, condition);
-    item->setData(0, Qt::DisplayRole, BuildStepConditionDelegate::buildStepConditionString(condition));
+    item->setData(0, Qt::DisplayRole, BuildStepConditionDelegate::buildStepConditionString(condition, isFile()));
 
     ui->tree->addTopLevelItem(item);
 }
@@ -115,7 +126,7 @@ void BuildStepsList::on_buttonAdd_clicked()
 
     item->setText(1, QString());
     item->setData(0, Qt::UserRole + 1, BuildStep::IF_ANY_FILE_BUILDS);
-    item->setData(0, Qt::DisplayRole, BuildStepConditionDelegate::buildStepConditionString(BuildStep::IF_ANY_FILE_BUILDS));
+    item->setData(0, Qt::DisplayRole, BuildStepConditionDelegate::buildStepConditionString(BuildStep::IF_ANY_FILE_BUILDS, isFile()));
 
     ui->tree->addTopLevelItem(item);
 

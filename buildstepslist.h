@@ -12,6 +12,8 @@ namespace Ui {
 class BuildStepsList;
 }
 
+class BuildStepConditionDelegate;
+
 class BuildStepsList : public QWidget
 {
     Q_OBJECT
@@ -19,6 +21,9 @@ class BuildStepsList : public QWidget
 public:
     explicit BuildStepsList(QWidget *parent = nullptr);
     ~BuildStepsList();
+
+    bool isFile();
+    void setIsFile(bool isFile);
 
     void clear();
     void addBuildStep(const QString& command, int condition);
@@ -32,6 +37,8 @@ signals:
 
 private:
     Ui::BuildStepsList *ui;
+
+    BuildStepConditionDelegate* mDelegate;
 
     static QIcon commandIcon(const QString& command);
 
