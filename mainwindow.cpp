@@ -604,13 +604,13 @@ void MainWindow::on_widgetPreBuildSteps_updated()
         return;
     }
 
-    mCurrentConfig->clearPreBuildSteps();
+    mCurrentConfig->preBuildStepsRef().clear();
 
     foreach (const auto& step, ui->widgetPreBuildSteps->buildSteps())
     {   
         std::string cmd = mProjectCodec->fromUnicode(step.first).toStdString();
 
-        mCurrentConfig->addPreBuildStep(cmd, step.second);
+        mCurrentConfig->preBuildStepsRef().add(cmd, step.second);
     }
 }
 
@@ -621,13 +621,13 @@ void MainWindow::on_widgetPostBuildSteps_updated()
         return;
     }
 
-    mCurrentConfig->clearPostBuildSteps();
+    mCurrentConfig->postBuildStepsRef().clear();
 
     foreach (const auto& step, ui->widgetPostBuildSteps->buildSteps())
     {
         std::string cmd = mProjectCodec->fromUnicode(step.first).toStdString();
 
-        mCurrentConfig->addPostBuildStep(cmd, step.second);
+        mCurrentConfig->postBuildStepsRef().add(cmd, step.second);
     }
 }
 
@@ -789,7 +789,7 @@ void MainWindow::reloadProjectSettings()
     const std::string config = ui->boxConfigurations->currentText().toStdString();
     ConfigSettings configSettings = settings.configSettings(config.c_str());
 
-    mCurrentConfig = &settings.configSettingsRef(config.c_str());
+    mCurrentConfig = &settings.config(config.c_str());
 
     //// Build steps ===========================================================
 
@@ -1050,9 +1050,13 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
         dialog.addUnordered(QString::fromStdString(src));
     }
 
-    for (const auto& src : mCurrentConfig->fileLinkOrder())
-    {
-        dialog.addOrdered(QString::fromStdString(src.first), (int)src.second - 1);
+    for (const std::string& src : mCurrentProject->files())
+    {   
+        int order = mCurrentConfig->fileOptions(src).linkOrder();
+        if (order >= 0)
+        {
+            dialog.addOrdered(QString::fromStdString(src), order - 1);
+        }
     }
 
     if (dialog.exec() == QDialog::Accepted)
@@ -1065,7 +1069,7 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
         {
             QString str = newLinkOrder.at(i);
 
-            mCurrentConfig->addFileLinkOrder(str.toStdString().c_str(), i + 1);
+            mCurrentConfig->file(str.toStdString()).setLinkOrder(i + 1);
         }
     }
 }

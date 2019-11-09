@@ -30,47 +30,51 @@ RCC_DIR     = build/rc
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    parser/configsettings.cpp \
-    parser/projectparser.cpp \
-    parser/projectreader.cpp \
-    parser/projectsettings.cpp \
-    parser/utils.cpp \
-    listeditor.cpp \
-    dialoglisteditor.cpp \
+    main.cpp \
+    mainwindow.cpp \
     buildstepconditiondelegate.cpp \
     buildstepslist.cpp \
     dialogconfigurationrename.cpp \
+    dialoglinkordereditor.cpp \
+    dialoglisteditor.cpp \
+    listeditor.cpp \
+    parser/buildstep.cpp \
+    parser/buildsteplist.cpp \
+    parser/configsettings.cpp \
     parser/export/abstractprojectexport.cpp \
     parser/export/projectexportccs3.cpp \
-    parser/buildstep.cpp \
-    dialoglinkordereditor.cpp
+    parser/fileoptions.cpp \
+    parser/projectparser.cpp \
+    parser/projectreader.cpp \
+    parser/projectsettings.cpp \
+    parser/utils.cpp
 
 HEADERS += \
-        mainwindow.h \
-    parser/configsettings.h \
-    parser/projectparser.h \
-    parser/projectreader.h \
-    parser/projectsettings.h \
-    parser/utils.h \
-    listeditor.h \
-    dialoglisteditor.h \
+    mainwindow.h \
     buildstepconditiondelegate.h \
     buildstepslist.h \
     dialogconfigurationrename.h \
+    dialoglinkordereditor.h \
+    dialoglisteditor.h \
+    listeditor.h \
+    parser/buildstep.h \
+    parser/buildsteplist.h \
+    parser/configsettings.h \
     parser/export/abstractprojectexport.h \
     parser/export/projectexportccs3.h \
-    parser/buildstep.h \
-    dialoglinkordereditor.h
+    parser/fileoptions.h \
+    parser/projectparser.h \
+    parser/projectreader.h \
+    parser/projectsettings.h \
+    parser/utils.h
 
 FORMS += \
-        mainwindow.ui \
-    listeditor.ui \
-    dialoglisteditor.ui \
     buildstepslist.ui \
     dialogconfigurationrename.ui \
-    dialoglinkordereditor.ui
+    dialoglinkordereditor.ui \
+    dialoglisteditor.ui \
+    listeditor.ui \
+    mainwindow.ui
 
 unix: target.path = /usr/local/bin
 !isEmpty(target.path): INSTALLS += target
