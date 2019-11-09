@@ -41,16 +41,13 @@ private slots:
     void on_boxConfigurations_currentIndexChanged(int index);
 
     void on_buttonConfigurationAdd_clicked();
-
     void on_buttonConfigurationRename_clicked();
-
     void on_buttonConfigurationCopy_clicked();
-
     void on_buttonConfigurationRemove_clicked();
 
     void on_buttonAddSource_clicked();
-
     void on_buttonRemoveSource_clicked();
+    void on_buttonReplaceSource_clicked();
 
     void on_editCompilerIncludePaths_listUpdated();
     void on_editCompilerDefines_listUpdated();

@@ -458,6 +458,68 @@ void MainWindow::on_buttonRemoveSource_clicked()
     reloadSources();
 }
 
+void MainWindow::on_buttonReplaceSource_clicked()
+{
+    if (mCurrentProject == nullptr)
+    {
+        return;
+    }
+
+    QDir projectDir;
+    {
+        int currentIndex = ui->boxProjects->currentIndex();
+        if (currentIndex < 0)
+        {
+            return;
+        }
+
+        QFileInfo fileInfo(mProjectPaths[currentIndex]);
+        projectDir = fileInfo.absoluteDir();
+    }
+
+    if (ui->treeSources->selectedItems().isEmpty())
+    {
+        return;
+    }
+
+    foreach (const QTreeWidgetItem* item, ui->treeSources->selectedItems())
+    {
+        if (item->childCount() > 0)
+        {
+            continue;
+        }
+
+        std::string oldsource = item->text(0).toStdString();
+
+        QString path = QFileDialog::getOpenFileName(this,
+                                                    QString::fromUtf8("Заменить файл"),
+                                                    QString(),
+                                                    QString("*"));
+
+        if (path.isEmpty())
+        {
+            continue;
+        }
+
+        std::string newsource = projectDir.relativeFilePath(path).toStdString();
+
+        for (std::string config : mCurrentProject->configs())
+        {
+            FileOptions options = mCurrentProject->configSettings(config).fileOptions(oldsource);
+
+            if (not options.isDefault())
+            {
+                mCurrentProject->config(config).file(newsource) = options;
+            }
+        }
+
+        mCurrentProject->addSource(newsource.c_str());
+        mCurrentProject->removeSource(oldsource.c_str());
+    }
+
+    reloadSources();
+}
+
 void MainWindow::on_editCompilerIncludePaths_listUpdated()
 {
     if (mCurrentConfig == nullptr)
