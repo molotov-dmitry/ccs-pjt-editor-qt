@@ -94,6 +94,7 @@ private:
     void updateToolsTabs();
     void updateWindowTitle();
 
+    void updateSources();
     void reloadSources();
 };
 

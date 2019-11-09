@@ -264,6 +264,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
         reloadProjectSettings();
     }
 
+    updateSources();
     updateToolsTabs();
     updateWindowTitle();
 }
@@ -286,6 +287,7 @@ void MainWindow::on_boxConfigurations_currentIndexChanged(int index)
         reloadProjectSettings();
     }
 
+    updateSources();
     updateToolsTabs();
     updateWindowTitle();
 }
@@ -987,6 +989,33 @@ void MainWindow::updateWindowTitle()
     this->setWindowTitle(title);
 }
 
+void MainWindow::updateSources()
+{
+    for (int i = 0; i < ui->treeSources->topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem* root = ui->treeSources->topLevelItem(i);
+
+        for (int j = 0; j < root->childCount(); ++j)
+        {
+            QTreeWidgetItem* item = root->child(j);
+
+            std::string source = item->text(0).toStdString();
+
+            QFont font = ui->treeSources->font();
+
+            if (mCurrentConfig != nullptr)
+            {
+                if (not mCurrentConfig->fileOptions(source).isDefault())
+                {
+                    font.setBold(true);
+                }
+            }
+
+            item->setFont(0, font);
+        }
+    }
+}
+
 void MainWindow::reloadSources()
 {
     QFileIconProvider iconProvider;
@@ -1024,16 +1053,6 @@ void MainWindow::reloadSources()
                 item->setText(0, name);
                 item->setIcon(0, QIcon::fromTheme(type.iconName()));
 
-                if (mCurrentConfig != nullptr)
-                {
-                    if (not mCurrentConfig->fileOptions(source).isDefault())
-                    {
-                        QFont font = ui->treeSources->font();
-                        font.setBold(true);
-                        item->setFont(0, font);
-                    }
-                }
-
                 root->addChild(item);
             }
 
@@ -1042,6 +1061,8 @@ void MainWindow::reloadSources()
             ui->treeSources->expandItem(root);
         }
     }
+
+    updateSources();
 
 }
 
@@ -1090,6 +1111,6 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
             mCurrentConfig->file(str.toStdString()).setLinkOrder(i + 1);
         }
 
-        reloadSources();
+        updateSources();
     }
 }
