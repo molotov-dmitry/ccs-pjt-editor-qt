@@ -83,3 +83,8 @@ unix: desktop.path = /usr/share/applications
 unix: desktop.files = ccs-pjt-editor-qt.desktop
 
 !isEmpty(desktop.path): INSTALLS += desktop
+
+unix: mimeinfo.path = /usr/share/mime/packages
+unix: mimeinfo.files = text-x-ccs-pjt.xml
+
+!isEmpty(mimeinfo.path): INSTALLS += mimeinfo
