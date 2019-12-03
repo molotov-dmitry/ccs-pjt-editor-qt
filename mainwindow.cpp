@@ -8,6 +8,7 @@
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QFileIconProvider>
+#include <QShortcut>
 
 #include "parser/projectreader.h"
 #include "parser/export/projectexportccs3.h"
@@ -64,6 +65,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->editLinkerMapFile, SIGNAL(textChanged(QString)), this, SLOT(updateLinkerOptions()));
 
     connect(ui->editArchiverOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateArchiverOptions()));
+
+    //// Shortcuts (because unused actions cannot be called using hotkeys) =====
+
+    QShortcut* newShortcut = new QShortcut(QKeySequence("Ctrl+N"), this);
+    connect(newShortcut, SIGNAL(activated()), ui->action_new, SLOT(trigger()));
+
+    QShortcut* openShortcut = new QShortcut(QKeySequence("Ctrl+O"), this);
+    connect(openShortcut, SIGNAL(activated()), ui->action_open, SLOT(trigger()));
+
+    QShortcut* saveShortcut = new QShortcut(QKeySequence("Ctrl+S"), this);
+    connect(saveShortcut, SIGNAL(activated()), ui->action_save, SLOT(trigger()));
+
+    QShortcut* saveAsShortcut = new QShortcut(QKeySequence("Ctrl+Shift+S"), this);
+    connect(saveAsShortcut, SIGNAL(activated()), ui->action_save_as, SLOT(trigger()));
+
+    QShortcut* exitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
+    connect(exitShortcut, SIGNAL(activated()), ui->action_exit, SLOT(trigger()));
 
     updateWindowTitle();
 }
