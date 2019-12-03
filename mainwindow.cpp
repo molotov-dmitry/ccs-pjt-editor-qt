@@ -20,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     mCurrentProject(nullptr),
-    mCurrentConfig(nullptr)
+    mCurrentConfig(nullptr),
+    mLoadingProject(false)
 {
     ui->setupUi(this);
 
@@ -569,6 +570,11 @@ void MainWindow::on_editCompilerUndefines_listUpdated()
 
 void MainWindow::updateOtherCompilerOptions()
 {
+    if (mLoadingProject)
+    {
+        return;
+    }
+
     if (mCurrentConfig == nullptr)
     {
         return;
@@ -617,6 +623,11 @@ void MainWindow::updateOtherCompilerOptions()
 
 void MainWindow::updateLinkerOptions()
 {
+    if (mLoadingProject)
+    {
+        return;
+    }
+
     if (mCurrentConfig == nullptr)
     {
         return;
@@ -652,6 +663,11 @@ void MainWindow::updateLinkerOptions()
 
 void MainWindow::updateArchiverOptions()
 {
+    if (mLoadingProject)
+    {
+        return;
+    }
+
     if (mCurrentConfig == nullptr)
     {
         return;
@@ -667,6 +683,11 @@ void MainWindow::updateArchiverOptions()
 
 void MainWindow::on_widgetPreBuildSteps_updated()
 {
+    if (mLoadingProject)
+    {
+        return;
+    }
+
     if (mCurrentConfig == nullptr)
     {
         return;
@@ -684,6 +705,11 @@ void MainWindow::on_widgetPreBuildSteps_updated()
 
 void MainWindow::on_widgetPostBuildSteps_updated()
 {
+    if (mLoadingProject)
+    {
+        return;
+    }
+
     if (mCurrentConfig == nullptr)
     {
         return;
@@ -859,7 +885,11 @@ void MainWindow::reloadProjectSettings()
 
     mCurrentConfig = &settings.config(config.c_str());
 
-    //// Build steps ===========================================================
+    //// Update project configuration options ==================================
+
+    mLoadingProject = true;
+
+    //// Build steps -----------------------------------------------------------
 
     for (const BuildStep& step : configSettings.preBuildSteps())
     {
@@ -873,7 +903,7 @@ void MainWindow::reloadProjectSettings()
                                                step.condition());
     }
 
-    //// Compiler ==============================================================
+    //// Compiler --------------------------------------------------------------
 
     {
         QStringList includePathList;
@@ -949,7 +979,7 @@ void MainWindow::reloadProjectSettings()
         ui->editCompilerOtherOptions->setText(otherOptions.join(' '));
     }
 
-    //// Linker ================================================================
+    //// Linker ----------------------------------------------------------------
 
     {
         QStringList otherOptions;
@@ -983,7 +1013,7 @@ void MainWindow::reloadProjectSettings()
         ui->editLinkerOtherOptions->setText(otherOptions.join(' '));
     }
 
-    //// Archiver ==============================================================
+    //// Archiver --------------------------------------------------------------
 
     {
         QStringList otherOptions;
@@ -997,6 +1027,10 @@ void MainWindow::reloadProjectSettings()
 
         ui->editArchiverOtherOptions->setText(otherOptions.join(' '));
     }
+
+    //// -----------------------------------------------------------------------
+
+    mLoadingProject = false;
 
     //// =======================================================================
 

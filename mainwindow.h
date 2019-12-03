@@ -83,6 +83,8 @@ private:
     ProjectSettings*          mCurrentProject;
     ConfigSettings*           mCurrentConfig;
 
+    bool                      mLoadingProject;
+
     void clearProject();
     void reloadProject();
     void clearProjectSettings();
