@@ -151,8 +151,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>399</width>
-          <height>501</height>
+          <width>457</width>
+          <height>532</height>
          </rect>
         </property>
         <attribute name="label">
@@ -251,8 +251,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>399</width>
-          <height>501</height>
+          <width>457</width>
+          <height>532</height>
          </rect>
         </property>
         <attribute name="label">
@@ -380,8 +380,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>399</width>
-          <height>501</height>
+          <width>457</width>
+          <height>532</height>
          </rect>
         </property>
         <attribute name="label">
@@ -460,7 +460,8 @@
               <string>Replace file</string>
              </property>
              <property name="icon">
-              <iconset theme="fileopen"/>
+              <iconset theme="fileopen">
+               <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
            </item>
@@ -484,7 +485,7 @@
       </widget>
       <widget class="QTabWidget" name="tabProjectSettings">
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -558,6 +559,9 @@
          </item>
          <item row="5" column="1">
           <widget class="QComboBox" name="editCompilerDataAccessModel">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="editable">
             <bool>true</bool>
            </property>
@@ -589,7 +593,11 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QSpinBox" name="editMh"/>
+          <widget class="QSpinBox" name="editMh">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item row="7" column="0">
           <widget class="QCheckBox" name="checkMi">
@@ -602,7 +610,11 @@
           </widget>
          </item>
          <item row="7" column="1">
-          <widget class="QSpinBox" name="editMi"/>
+          <widget class="QSpinBox" name="editMi">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item row="8" column="0">
           <widget class="QCheckBox" name="checkMv">
@@ -616,6 +628,9 @@
          </item>
          <item row="8" column="1">
           <widget class="QComboBox" name="editMv">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="editable">
             <bool>true</bool>
            </property>
@@ -793,7 +808,7 @@
      <x>0</x>
      <y>0</y>
      <width>1089</width>
-     <height>29</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
@@ -879,5 +894,70 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>checkDataAccessModel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editCompilerDataAccessModel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>561</x>
+     <y>275</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>653</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMh</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editMh</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>679</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMi</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editMi</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>331</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>754</x>
+     <y>331</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMv</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editMv</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>498</x>
+     <y>369</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>714</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
