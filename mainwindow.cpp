@@ -1069,7 +1069,7 @@ void MainWindow::updateSources()
 
             if (mCurrentConfig != nullptr)
             {
-                if (not mCurrentConfig->fileOptions(source).isDefault())
+                if (not mCurrentConfig->fileOptions(source).isDefault(false))
                 {
                     font.setBold(true);
                 }
