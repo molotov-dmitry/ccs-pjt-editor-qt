@@ -244,6 +244,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
 
         ui->buttonConfigurationAdd->setEnabled(false);
 
+        ui->buttonProjectSave->setEnabled(false);
         ui->action_save->setEnabled(false);
         ui->action_save_as->setEnabled(false);
 
@@ -255,6 +256,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
 
         ui->buttonConfigurationAdd->setEnabled(true);
 
+        ui->buttonProjectSave->setEnabled(true);
         ui->action_save->setEnabled(true);
         ui->action_save_as->setEnabled(true);
 
