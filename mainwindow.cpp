@@ -57,6 +57,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkLinkerRomAutoinitModel, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
     connect(ui->checkLinkerUnspecifiedSectionsWarning, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
     connect(ui->checkLinkerRereadLibraries, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+    connect(ui->checkLinkerOutputFile, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+    connect(ui->checkLinkerMapFile, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+
+    connect(ui->editLinkerOutputFile, SIGNAL(textChanged(QString)), this, SLOT(updateLinkerOptions()));
+    connect(ui->editLinkerMapFile, SIGNAL(textChanged(QString)), this, SLOT(updateLinkerOptions()));
 
     connect(ui->editArchiverOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateArchiverOptions()));
 
@@ -645,6 +650,18 @@ void MainWindow::updateLinkerOptions()
         mCurrentConfig->addLinkerOption("-c");
     }
 
+    if (ui->checkLinkerMapFile->isChecked())
+    {
+        std::string value = ui->editLinkerMapFile->text().toStdString();
+        mCurrentConfig->addLinkerOption("-m", value, true);
+    }
+
+    if (ui->checkLinkerOutputFile->isChecked())
+    {
+        std::string value = ui->editLinkerOutputFile->text().toStdString();
+        mCurrentConfig->addLinkerOption("-o", value, true);
+    }
+
     if (ui->checkLinkerUnspecifiedSectionsWarning->isChecked())
     {
         mCurrentConfig->addLinkerOption("-w");
@@ -846,6 +863,8 @@ static bool isConfig(const std::string& line, const char* option, std::string& v
         return false;
     }
 
+    remove_quotes(value);
+
     return true;
 }
 
@@ -1003,6 +1022,18 @@ void MainWindow::reloadProjectSettings()
             else if (option == "-x")
             {
                 ui->checkLinkerRereadLibraries->setChecked(true);
+            }
+            else if (isConfig(option, "-o", value))
+            {
+                QString valueUnicode = mProjectCodec->toUnicode(value.c_str());
+                ui->checkLinkerOutputFile->setChecked(true);
+                ui->editLinkerOutputFile->setText(valueUnicode);
+            }
+            else if (isConfig(option, "-m", value))
+            {
+                QString valueUnicode = mProjectCodec->toUnicode(value.c_str());
+                ui->checkLinkerMapFile->setChecked(true);
+                ui->editLinkerMapFile->setText(valueUnicode);
             }
             else
             {
@@ -1210,5 +1241,49 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
         }
 
         updateSources();
+    }
+}
+
+void MainWindow::on_buttonLinkerOutputFileExtra_clicked()
+{
+    if (mCurrentProject == nullptr || mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    QString configName = ui->boxConfigurations->currentText();
+    QString fileName   = ui->boxProjects->currentText().replace(QRegExp(".pjt$"), "");
+
+    QMenu menu;
+
+    menu.addAction("./" + configName + "/" + fileName + ".out");
+
+    QAction* result = menu.exec(QCursor::pos());
+
+    if (result != nullptr)
+    {
+        ui->editLinkerOutputFile->setText(result->text());
+    }
+}
+
+void MainWindow::on_buttonLinkerMapFileExtra_clicked()
+{
+    if (mCurrentProject == nullptr || mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    QString configName = ui->boxConfigurations->currentText();
+    QString fileName   = ui->boxProjects->currentText().replace(QRegExp(".pjt$"), "");
+
+    QMenu menu;
+
+    menu.addAction("./" + configName + "/" + fileName + ".map");
+
+    QAction* result = menu.exec(QCursor::pos());
+
+    if (result != nullptr)
+    {
+        ui->editLinkerMapFile->setText(result->text());
     }
 }

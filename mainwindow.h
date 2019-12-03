@@ -64,6 +64,10 @@ private slots:
 
     void on_buttonLinkerEditLinkOrder_clicked();
 
+    void on_buttonLinkerOutputFileExtra_clicked();
+
+    void on_buttonLinkerMapFileExtra_clicked();
+
 private:
     Ui::MainWindow *ui;
 
