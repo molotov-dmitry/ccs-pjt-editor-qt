@@ -856,6 +856,12 @@ void MainWindow::clearProjectSettings()
     ui->checkLinkerRereadLibraries->setChecked(false);
     ui->checkLinkerUnspecifiedSectionsWarning->setChecked(false);
 
+    ui->checkLinkerOutputFile->setChecked(false);
+    ui->checkLinkerMapFile->setChecked(false);
+
+    ui->editLinkerOutputFile->clear();
+    ui->editLinkerMapFile->clear();
+
     ui->editLinkerOtherOptions->clear();
 
     //// Archiver ==============================================================
