@@ -77,8 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut* saveShortcut = new QShortcut(QKeySequence("Ctrl+S"), this);
     connect(saveShortcut, SIGNAL(activated()), ui->action_save, SLOT(trigger()));
 
-    QShortcut* saveAsShortcut = new QShortcut(QKeySequence("Ctrl+Shift+S"), this);
-    connect(saveAsShortcut, SIGNAL(activated()), ui->action_save_as, SLOT(trigger()));
+    QShortcut* saveAllShortcut = new QShortcut(QKeySequence("Ctrl+Shift+S"), this);
+    connect(saveAllShortcut, SIGNAL(activated()), ui->action_save_all, SLOT(trigger()));
 
     QShortcut* exitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
     connect(exitShortcut, SIGNAL(activated()), ui->action_exit, SLOT(trigger()));
