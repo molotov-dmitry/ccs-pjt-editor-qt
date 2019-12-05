@@ -29,6 +29,7 @@ private slots:
     void on_action_new_triggered();
     void on_action_save_triggered();
     void on_action_save_as_triggered();
+    void on_action_save_all_triggered();
 
     void on_boxProjectType_currentIndexChanged(int index);
 

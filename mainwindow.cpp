@@ -249,6 +249,41 @@ void MainWindow::on_action_save_as_triggered()
     checkProjectChanged();
 }
 
+void MainWindow::on_action_save_all_triggered()
+{
+    for (int i = 0; i < ui->boxProjects->count(); ++i)
+    {
+        if (mProjects[i] == mSavedProjects[i])
+        {
+            continue;
+        }
+
+        QString path = mProjectPaths[i];
+
+        ProjectExportCcs3 writer;
+
+        if (not writer.write(mProjects[i], path.toStdString().c_str()))
+        {
+            QMessageBox::critical(this,
+                                  QString::fromUtf8("Сохранение проекта"),
+                                  QString::fromUtf8(writer.lastError().c_str()));
+
+            continue;
+        }
+
+        mSavedProjects[i] = mProjects[i];
+
+        if (i == ui->boxProjects->currentIndex())
+        {
+            checkProjectChanged();
+        }
+        else
+        {
+            ui->boxProjects->setItemIcon(i, QIcon(":/icons/status-saved.png"));
+        }
+    }
+}
+
 void MainWindow::on_boxProjectType_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
@@ -323,6 +358,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
         ui->buttonProjectSave->setEnabled(false);
         ui->action_save->setEnabled(false);
         ui->action_save_as->setEnabled(false);
+        ui->action_save_all->setEnabled(false);
 
         clearProjectSettings();
     }
@@ -335,6 +371,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
         ui->buttonProjectSave->setEnabled(true);
         ui->action_save->setEnabled(true);
         ui->action_save_as->setEnabled(true);
+        ui->action_save_all->setEnabled(true);
 
         mCurrentProject = &mProjects[index];
 
@@ -1307,6 +1344,7 @@ void MainWindow::on_buttonMenuExtra_clicked()
     QMenu menu;
 
     menu.addAction(ui->action_save_as);
+    menu.addAction(ui->action_save_all);
 
     menu.exec(QCursor::pos());
 }
@@ -1420,3 +1458,4 @@ void MainWindow::checkProjectChanged()
 
     ui->boxProjects->setItemIcon(currentIndex, statusIcon);
 }
+

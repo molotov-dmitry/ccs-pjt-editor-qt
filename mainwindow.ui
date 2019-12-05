@@ -957,6 +957,14 @@
     <string>Exit</string>
    </property>
   </action>
+  <action name="action_save_all">
+   <property name="icon">
+    <iconset theme="document-save"/>
+   </property>
+   <property name="text">
+    <string>Save all</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
