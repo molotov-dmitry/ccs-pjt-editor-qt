@@ -171,6 +171,7 @@ void MainWindow::on_action_new_triggered()
     mProjectPaths.append(path);
 
     ui->boxProjects->addItem(fileInfo.fileName());
+    ui->boxProjects->setCurrentIndex(ui->boxProjects->count() - 1);
 
     checkProjectChanged();
 }
