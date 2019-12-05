@@ -134,11 +134,43 @@ void MainWindow::on_action_open_triggered()
 
 void MainWindow::on_action_new_triggered()
 {
-    mProjects.append(ProjectSettings());
-    mSavedProjects.append(ProjectSettings());
-    mProjectPaths.append(QString());
+    QString path = QFileDialog::getSaveFileName(this,
+                                                QString::fromUtf8("Создать проект"),
+                                                QString(),
+                                                QString("*.pjt"));
 
-    ui->boxProjects->addItem("New project");
+    if (path.isEmpty())
+    {
+        return;
+    }
+
+    if (not path.endsWith(".pjt", Qt::CaseInsensitive))
+    {
+        path.append(".pjt");
+    }
+
+    QFileInfo fileInfo(path);
+
+    ProjectSettings newProject;
+
+    {
+        ProjectExportCcs3 writer;
+
+        if (not writer.write(newProject, path.toStdString().c_str()))
+        {
+            QMessageBox::critical(this,
+                                  QString::fromUtf8("Создание проекта"),
+                                  QString::fromUtf8(writer.lastError().c_str()));
+
+            return;
+        }
+    }
+
+    mProjects.append(newProject);
+    mSavedProjects.append(newProject);
+    mProjectPaths.append(path);
+
+    ui->boxProjects->addItem(fileInfo.fileName());
 
     checkProjectChanged();
 }
@@ -152,11 +184,6 @@ void MainWindow::on_action_save_triggered()
 
     int currentIndex = ui->boxProjects->currentIndex();
 
-    if (mProjectPaths[currentIndex].isEmpty())
-    {
-        on_action_save_as_triggered();
-    }
-    else
     {
         QString path = mProjectPaths[currentIndex];
 
@@ -194,6 +221,11 @@ void MainWindow::on_action_save_as_triggered()
     if (path.isEmpty())
     {
         return;
+    }
+
+    if (not path.endsWith(".pjt", Qt::CaseInsensitive))
+    {
+        path.append(".pjt");
     }
 
     QFileInfo fileInfo(path);
