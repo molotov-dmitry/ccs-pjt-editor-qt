@@ -34,7 +34,7 @@ private slots:
 
     void on_boxProjectType_activated(int index);
 
-    void on_editCpuFamily_activated(const QString &cpuFamily);
+    void on_editCpuFamily_currentTextChanged(const QString &cpuFamily);
 
     void on_boxProjects_currentIndexChanged(int index);
 
@@ -63,10 +63,10 @@ private slots:
     void on_buttonMenuExtra_clicked();
 
     void on_buttonLinkerEditLinkOrder_clicked();
-
     void on_buttonLinkerOutputFileExtra_clicked();
-
     void on_buttonLinkerMapFileExtra_clicked();
+
+    void checkProjectChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -83,6 +83,7 @@ private:
 
     QVector <QString>         mProjectPaths;
     QVector <ProjectSettings> mProjects;
+    QVector <ProjectSettings> mSavedProjects;
 
     ProjectSettings*          mCurrentProject;
     ConfigSettings*           mCurrentConfig;

@@ -88,3 +88,6 @@ unix: mimeinfo.path = /usr/share/mime/packages
 unix: mimeinfo.files = text-x-ccs-pjt.xml
 
 !isEmpty(mimeinfo.path): INSTALLS += mimeinfo
+
+RESOURCES += \
+    res/resources.qrc

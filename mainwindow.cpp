@@ -107,11 +107,14 @@ void MainWindow::openProject(const QString& path)
     }
 
     mProjects.append(reader.projectSettings());
+    mSavedProjects.append(reader.projectSettings());
     mProjectPaths.append(path);
 
     ui->boxProjects->addItem(fileInfo.fileName());
 
     ui->boxProjects->setCurrentIndex(ui->boxProjects->count() - 1);
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_action_open_triggered()
@@ -132,9 +135,12 @@ void MainWindow::on_action_open_triggered()
 void MainWindow::on_action_new_triggered()
 {
     mProjects.append(ProjectSettings());
+    mSavedProjects.append(ProjectSettings());
     mProjectPaths.append(QString());
 
     ui->boxProjects->addItem("New project");
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_action_save_triggered()
@@ -164,6 +170,10 @@ void MainWindow::on_action_save_triggered()
 
             return;
         }
+
+        mSavedProjects[currentIndex] = mProjects[currentIndex];
+
+        checkProjectChanged();
     }
 }
 
@@ -201,6 +211,9 @@ void MainWindow::on_action_save_as_triggered()
 
     mProjectPaths[currentIndex] = path;
     ui->boxProjects->setItemText(currentIndex, fileInfo.fileName());
+
+    mSavedProjects[currentIndex] = mProjects[currentIndex];
+    checkProjectChanged();
 }
 
 void MainWindow::on_boxProjectType_currentIndexChanged(int index)
@@ -246,16 +259,22 @@ void MainWindow::on_boxProjectType_activated(int index)
     }
 
     updateToolsTabs();
-
+    checkProjectChanged();
 }
 
-void MainWindow::on_editCpuFamily_activated(const QString &cpuFamily)
+void MainWindow::on_editCpuFamily_currentTextChanged(const QString &cpuFamily)
 {
+    if (mLoadingProject)
+    {
+        return;
+    }
+
     int currentIndex = ui->boxProjects->currentIndex();
 
     if (currentIndex >= 0)
     {
         mProjects[currentIndex].setCpuFamily(cpuFamily.toStdString().c_str());
+        checkProjectChanged();
     }
 }
 
@@ -288,6 +307,7 @@ void MainWindow::on_boxProjects_currentIndexChanged(int index)
 
         reloadProject();
         reloadProjectSettings();
+        checkProjectChanged();
     }
 
     updateSources();
@@ -338,6 +358,8 @@ void MainWindow::on_buttonConfigurationAdd_clicked()
         project.addConfig(configName.c_str());
 
         ui->boxConfigurations->addItem(dialog.name());
+
+        checkProjectChanged();
     }
 }
 
@@ -365,6 +387,8 @@ void MainWindow::on_buttonConfigurationRename_clicked()
         project.renameConfig(oldName, configName);
 
         ui->boxConfigurations->setItemText(configurationIndex, dialog.name());
+
+        checkProjectChanged();
     }
 }
 
@@ -393,6 +417,7 @@ void MainWindow::on_buttonConfigurationCopy_clicked()
 
         ui->boxConfigurations->addItem(dialog.name());
 
+        checkProjectChanged();
     }
 }
 
@@ -413,6 +438,8 @@ void MainWindow::on_buttonConfigurationRemove_clicked()
     project.removeConfig(configName.c_str());
 
     ui->boxConfigurations->removeItem(configurationIndex);
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_buttonAddSource_clicked()
@@ -453,6 +480,7 @@ void MainWindow::on_buttonAddSource_clicked()
     }
 
     reloadSources();
+    checkProjectChanged();
 }
 
 void MainWindow::on_buttonRemoveSource_clicked()
@@ -482,6 +510,7 @@ void MainWindow::on_buttonRemoveSource_clicked()
     }
 
     reloadSources();
+    checkProjectChanged();
 }
 
 void MainWindow::on_buttonReplaceSource_clicked()
@@ -544,6 +573,7 @@ void MainWindow::on_buttonReplaceSource_clicked()
     }
 
     reloadSources();
+    checkProjectChanged();
 }
 
 void MainWindow::on_editCompilerIncludePaths_listUpdated()
@@ -559,6 +589,8 @@ void MainWindow::on_editCompilerIncludePaths_listUpdated()
     {
         mCurrentConfig->addIncludePath(option.toStdString());
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_editCompilerDefines_listUpdated()
@@ -574,6 +606,8 @@ void MainWindow::on_editCompilerDefines_listUpdated()
     {
         mCurrentConfig->addDefine(option.toStdString());
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_editCompilerUndefines_listUpdated()
@@ -589,6 +623,8 @@ void MainWindow::on_editCompilerUndefines_listUpdated()
     {
         mCurrentConfig->addUndefine(option.toStdString());
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::updateOtherCompilerOptions()
@@ -642,6 +678,8 @@ void MainWindow::updateOtherCompilerOptions()
     {
         mCurrentConfig->addOtherCompilerOption(option.toStdString());
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::updateLinkerOptions()
@@ -694,6 +732,8 @@ void MainWindow::updateLinkerOptions()
     {
         mCurrentConfig->addLinkerOption(option.toStdString().c_str());
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::updateArchiverOptions()
@@ -714,6 +754,8 @@ void MainWindow::updateArchiverOptions()
     {
         mCurrentConfig->addArchiverOption(option.toStdString().c_str());
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_widgetPreBuildSteps_updated()
@@ -736,6 +778,8 @@ void MainWindow::on_widgetPreBuildSteps_updated()
 
         mCurrentConfig->preBuildStepsRef().add(cmd, step.second);
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::on_widgetPostBuildSteps_updated()
@@ -758,6 +802,8 @@ void MainWindow::on_widgetPostBuildSteps_updated()
 
         mCurrentConfig->postBuildStepsRef().add(cmd, step.second);
     }
+
+    checkProjectChanged();
 }
 
 void MainWindow::clearProject()
@@ -782,6 +828,8 @@ void MainWindow::reloadProject()
     {
         return;
     }
+
+    mLoadingProject = true;
 
     clearProject();
 
@@ -820,6 +868,8 @@ void MainWindow::reloadProject()
     }
 
     ui->editCpuFamily->setCurrentText(mProjectCodec->toUnicode(settings.cpuFamily().c_str()));
+
+    mLoadingProject = false;
 }
 
 void MainWindow::clearProjectSettings()
@@ -1265,6 +1315,7 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
         }
 
         updateSources();
+        checkProjectChanged();
     }
 }
 
@@ -1310,4 +1361,29 @@ void MainWindow::on_buttonLinkerMapFileExtra_clicked()
     {
         ui->editLinkerMapFile->setText(result->text());
     }
+}
+
+void MainWindow::checkProjectChanged()
+{
+    if (ui->boxProjects->currentIndex() < 0)
+    {
+        return;
+    }
+
+    int currentIndex = ui->boxProjects->currentIndex();
+
+    bool projectSaved = mProjects[currentIndex] == mSavedProjects[currentIndex];
+
+    QIcon statusIcon;
+
+    if (projectSaved)
+    {
+        statusIcon = QIcon(":/icons/status-saved.png");
+    }
+    else
+    {
+        statusIcon = QIcon(":/icons/status-changed.png");
+    }
+
+    ui->boxProjects->setItemIcon(currentIndex, statusIcon);
 }

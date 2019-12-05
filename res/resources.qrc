@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/status-changed.png</file>
+        <file>icons/status-saved.png</file>
+    </qresource>
+</RCC>
