@@ -251,6 +251,8 @@ void MainWindow::on_action_save_as_triggered()
 
 void MainWindow::on_action_save_all_triggered()
 {
+    mAllProjectsSaved = true;
+
     for (int i = 0; i < ui->boxProjects->count(); ++i)
     {
         if (mProjects[i] == mSavedProjects[i])
@@ -267,6 +269,8 @@ void MainWindow::on_action_save_all_triggered()
             QMessageBox::critical(this,
                                   QString::fromUtf8("Сохранение проекта"),
                                   QString::fromUtf8(writer.lastError().c_str()));
+
+            mAllProjectsSaved = false;
 
             continue;
         }
@@ -874,6 +878,58 @@ void MainWindow::on_widgetPostBuildSteps_updated()
     }
 
     checkProjectChanged();
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    QList<int> unsavedProjects;
+
+    for (int i = 0; i < ui->boxProjects->count(); ++i)
+    {
+        if (mProjects[i] != mSavedProjects[i])
+        {
+            unsavedProjects.append(i);
+        }
+    }
+
+    if (not unsavedProjects.isEmpty())
+    {
+        QString title = "Following projects have unsaved changes:\n\n";
+
+        foreach (int i, unsavedProjects)
+        {
+            title.append(ui->boxProjects->itemText(i));
+            title.append("\n");
+        }
+
+        title.append("\n");
+        title.append("Save them before quit?");
+
+        QMessageBox::StandardButton reply;
+
+        reply = QMessageBox::question(this, "Quit", title,
+                                      QMessageBox::Yes |
+                                      QMessageBox::No |
+                                      QMessageBox::Cancel);
+
+        if (reply == QMessageBox::Cancel)
+        {
+            event->ignore();
+            return;
+        }
+        else if (reply != QMessageBox::No)
+        {
+            ui->action_save_all->trigger();
+
+            if (not mAllProjectsSaved)
+            {
+                event->ignore();
+                return;
+            }
+        }
+    }
+
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::clearProject()

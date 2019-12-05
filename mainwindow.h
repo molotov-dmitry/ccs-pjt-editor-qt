@@ -90,6 +90,9 @@ private:
     ConfigSettings*           mCurrentConfig;
 
     bool                      mLoadingProject;
+    bool                      mAllProjectsSaved;
+
+    void closeEvent(QCloseEvent* event);
 
     void clearProject();
     void reloadProject();
