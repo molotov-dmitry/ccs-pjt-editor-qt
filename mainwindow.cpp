@@ -46,11 +46,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->checkMh, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
     connect(ui->checkMi, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
     connect(ui->checkMv, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->checkCompilerOptimizationLevel, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->checkCompilerOptimizationType, SIGNAL(toggled(bool)), this, SLOT(updateOtherCompilerOptions()));
 
     connect(ui->editCompilerDataAccessModel, SIGNAL(currentTextChanged(QString)), this, SLOT(updateOtherCompilerOptions()));
     connect(ui->editMh, SIGNAL(valueChanged(int)), this, SLOT(updateOtherCompilerOptions()));
     connect(ui->editMi, SIGNAL(valueChanged(int)), this, SLOT(updateOtherCompilerOptions()));
     connect(ui->editMv, SIGNAL(currentTextChanged(QString)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->boxCompilerOptimizationLevel, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOtherCompilerOptions()));
+    connect(ui->editCompilerOptimizationType, SIGNAL(valueChanged(int)), this, SLOT(updateOtherCompilerOptions()));
 
     connect(ui->editLinkerOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateLinkerOptions()));
 
@@ -720,6 +724,13 @@ void MainWindow::updateOtherCompilerOptions()
         mCurrentConfig->addOtherCompilerOption("-g");
     }
 
+    if (ui->checkCompilerOptimizationLevel->isChecked())
+    {
+        int value = ui->boxCompilerOptimizationLevel->currentIndex();
+
+        mCurrentConfig->addOtherCompilerOption(string_format("-o%d", value));
+    }
+
     if (ui->checkMh->isChecked())
     {
         int value = ui->editMh->value();
@@ -732,6 +743,13 @@ void MainWindow::updateOtherCompilerOptions()
         int value = ui->editMi->value();
 
         mCurrentConfig->addOtherCompilerOption(string_format("-mi%d", value));
+    }
+
+    if (ui->checkCompilerOptimizationType->isChecked())
+    {
+        int value = ui->editCompilerOptimizationType->value();
+
+        mCurrentConfig->addOtherCompilerOption(string_format("-ms%d", value));
     }
 
     if (ui->checkMv->isChecked())
@@ -1018,10 +1036,15 @@ void MainWindow::clearProjectSettings()
     ui->checkMh->setChecked(false);
     ui->checkMi->setChecked(false);
     ui->checkMv->setChecked(false);
+    ui->checkCompilerOptimizationLevel->setChecked(false);
+    ui->checkCompilerOptimizationType->setChecked(false);
 
     ui->editMh->clear();
     ui->editMi->clear();
     ui->editMv->clearEditText();
+
+    ui->boxCompilerOptimizationLevel->setCurrentIndex(0);
+    ui->editCompilerOptimizationType->setValue(0);
 
     ui->editCompilerOtherOptions->clear();
 
@@ -1188,6 +1211,20 @@ void MainWindow::reloadProjectSettings()
             {
                 ui->checkMv->setChecked(true);
                 ui->editMv->setEditText(mProjectCodec->toUnicode(value.c_str()));
+            }
+            else if (isIntConfig(option, "-o", intValue) &&
+                     intValue >= 0 &&
+                     (intValue <= ui->boxCompilerOptimizationLevel->count()))
+            {
+                ui->checkCompilerOptimizationLevel->setChecked(true);
+                ui->boxCompilerOptimizationLevel->setCurrentIndex(intValue);
+            }
+            else if (isIntConfig(option, "-ms", intValue) &&
+                     (intValue >= ui->editCompilerOptimizationType->minimum()) &&
+                     (intValue <= ui->editCompilerOptimizationType->maximum()))
+            {
+                ui->checkCompilerOptimizationType->setChecked(true);
+                ui->editCompilerOptimizationType->setValue(intValue);
             }
             else
             {

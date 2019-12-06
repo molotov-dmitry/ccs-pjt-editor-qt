@@ -526,6 +526,13 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="1">
+          <widget class="ListEditor" name="editCompilerIncludePaths">
+           <property name="placeholderText">
+            <string>Include paths</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
@@ -533,10 +540,24 @@
            </property>
           </widget>
          </item>
+         <item row="1" column="1">
+          <widget class="ListEditor" name="editCompilerDefines">
+           <property name="placeholderText">
+            <string>Defined names</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Undefines:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="ListEditor" name="editCompilerUndefines">
+           <property name="placeholderText">
+            <string>Undefined names</string>
            </property>
           </widget>
          </item>
@@ -622,7 +643,7 @@
             <string>Target processor version</string>
            </property>
            <property name="text">
-            <string>mv</string>
+            <string>mv:</string>
            </property>
           </widget>
          </item>
@@ -651,35 +672,92 @@
            </item>
           </widget>
          </item>
+         <item row="9" column="0">
+          <widget class="QCheckBox" name="checkCompilerOptimizationLevel">
+           <property name="text">
+            <string>Optimization level:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QComboBox" name="boxCompilerOptimizationLevel">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <item>
+            <property name="text">
+             <string>Register (-o0)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Local (-o1)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Function (-o2)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Global (-o3)</string>
+            </property>
+           </item>
+          </widget>
+         </item>
          <item row="10" column="0">
+          <widget class="QCheckBox" name="checkCompilerOptimizationType">
+           <property name="text">
+            <string>Optimize by:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>More speed</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="editCompilerOptimizationType">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>3</number>
+             </property>
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBelow</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Less size</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="11" column="0">
           <widget class="QLabel" name="label_8">
            <property name="text">
             <string>Other options:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="ListEditor" name="editCompilerIncludePaths">
-           <property name="placeholderText">
-            <string>Include paths</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="ListEditor" name="editCompilerDefines">
-           <property name="placeholderText">
-            <string>Defined names</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="ListEditor" name="editCompilerUndefines">
-           <property name="placeholderText">
-            <string>Undefined names</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
+         <item row="11" column="1">
           <widget class="ListEditor" name="editCompilerOtherOptions">
            <property name="placeholderText">
             <string>Other compiler options</string>
@@ -959,7 +1037,8 @@
   </action>
   <action name="action_save_all">
    <property name="icon">
-    <iconset theme="document-save"/>
+    <iconset theme="document-save">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Save all</string>
@@ -1005,8 +1084,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>515</x>
-     <y>304</y>
+     <x>505</x>
+     <y>312</y>
     </hint>
     <hint type="destinationlabel">
      <x>679</x>
@@ -1021,8 +1100,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>512</x>
-     <y>331</y>
+     <x>501</x>
+     <y>345</y>
     </hint>
     <hint type="destinationlabel">
      <x>754</x>
@@ -1107,6 +1186,38 @@
     <hint type="destinationlabel">
      <x>1054</x>
      <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkCompilerOptimizationLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>boxCompilerOptimizationLevel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>532</x>
+     <y>402</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>660</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkCompilerOptimizationType</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editCompilerOptimizationType</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>510</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>752</x>
+     <y>429</y>
     </hint>
    </hints>
   </connection>
