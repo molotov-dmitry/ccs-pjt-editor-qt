@@ -1068,17 +1068,18 @@ void MainWindow::clearProjectSettings()
     ui->editArchiverOtherOptions->clear();
 }
 
-static bool isConfig(const std::string& line, const char* option, std::string& value)
+static bool isConfig(const std::string& line, const std::string& option, std::string& value)
 {
     if (starts_with(line, option, true))
     {
-        if (line.at(strlen(option)) == '=')
+        std::string::size_type optionLen = option.length();
+        if ((line.length() > optionLen) && (line.at(optionLen) == '='))
         {
-            value = line.data() + strlen(option) + 1;
+            value = line.data() + optionLen + 1;
         }
         else
         {
-            value = line.data() + strlen(option);
+            value = line.data() + optionLen;
         }
     }
     else
