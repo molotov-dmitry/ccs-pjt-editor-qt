@@ -47,7 +47,8 @@ SOURCES += \
     parser/projectparser.cpp \
     parser/projectreader.cpp \
     parser/projectsettings.cpp \
-    parser/utils.cpp
+    parser/utils.cpp \
+    dialogfileoptions.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -66,7 +67,8 @@ HEADERS += \
     parser/projectparser.h \
     parser/projectreader.h \
     parser/projectsettings.h \
-    parser/utils.h
+    parser/utils.h \
+    dialogfileoptions.h
 
 FORMS += \
     buildstepslist.ui \
@@ -74,7 +76,8 @@ FORMS += \
     dialoglinkordereditor.ui \
     dialoglisteditor.ui \
     listeditor.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    dialogfileoptions.ui
 
 unix: target.path = /usr/local/bin
 !isEmpty(target.path): INSTALLS += target

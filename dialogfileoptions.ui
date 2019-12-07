@@ -1,0 +1,1251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogFileOptions</class>
+ <widget class="QDialog" name="DialogFileOptions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>686</width>
+    <height>632</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>General settings</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Build file:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QComboBox" name="boxBuildCondition">
+            <item>
+             <property name="text">
+              <string>If changed</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Always</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Never</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Pre-build steps:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="BuildStepsList" name="widgetPreBuildSteps" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Post-build steps:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="BuildStepsList" name="widgetPostBuildSteps" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Compiler options</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="2">
+        <widget class="QToolButton" name="buttonResetIncludePaths">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0" colspan="3">
+        <widget class="QPushButton" name="buttonResetAll">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Restore all to project defaults</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QToolButton" name="buttonResetMi">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QComboBox" name="editOptimizationLevel">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>Register (-o0)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Local (-o1)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Function (-o2)</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Global (-o3)</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QCheckBox" name="checkMi">
+         <property name="toolTip">
+          <string>Specify maximum cycles that interrupts may be disabled</string>
+         </property>
+         <property name="text">
+          <string>mi:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="ListEditor" name="editOtherOptions">
+         <property name="placeholderText">
+          <string>Other compiler options</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QCheckBox" name="checkOptimizationLevel">
+         <property name="text">
+          <string>Optimization level:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Include paths:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QToolButton" name="buttonResetDefines">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QToolButton" name="buttonResetUndefines">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="editMi">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QToolButton" name="buttonResetMv">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="ListEditor" name="editIncludePaths">
+         <property name="placeholderText">
+          <string>Include paths</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Other options:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="ListEditor" name="editDefines">
+         <property name="placeholderText">
+          <string>Defined names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QToolButton" name="buttonResetOptimizationType">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="ListEditor" name="editUndefines">
+         <property name="placeholderText">
+          <string>Undefined names</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>More speed</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="editOptimizationType">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximum">
+            <number>3</number>
+           </property>
+           <property name="pageStep">
+            <number>1</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition">
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Less size</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="2">
+        <widget class="QToolButton" name="buttonResetDataAccessModel">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QToolButton" name="buttonResetOptimizationLevel">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QToolButton" name="buttonResetMh">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="editMh">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="checkMv">
+         <property name="toolTip">
+          <string>Target processor version</string>
+         </property>
+         <property name="text">
+          <string>mv:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCheckBox" name="checkDataAccessModel">
+         <property name="text">
+          <string>Data access model:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QToolButton" name="buttonResetFullSymbolicDebug">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QComboBox" name="editDataAccessModel">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>far</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>far_aggregates</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>near</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="checkFullSymbolicDebug">
+         <property name="toolTip">
+          <string>Full symbolic debug</string>
+         </property>
+         <property name="text">
+          <string>Full symbolic debug</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Defines:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QCheckBox" name="checkMh">
+         <property name="toolTip">
+          <string>Specify speculative load byte count threshold</string>
+         </property>
+         <property name="text">
+          <string>mh:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QCheckBox" name="checkOptimizationType">
+         <property name="text">
+          <string>Optimize by:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Undefines:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QComboBox" name="editMv">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <item>
+          <property name="text">
+           <string>6200</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>6400</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>6400+</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QToolButton" name="buttonResetOtherOptions">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-clear">
+           <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="3">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="checkExcludeFromBuild">
+     <property name="text">
+      <string>Exclude file from build</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ListEditor</class>
+   <extends>QLineEdit</extends>
+   <header>listeditor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BuildStepsList</class>
+   <extends>QWidget</extends>
+   <header>buildstepslist.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>checkExcludeFromBuild</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>editIncludePaths</tabstop>
+  <tabstop>buttonResetIncludePaths</tabstop>
+  <tabstop>editDefines</tabstop>
+  <tabstop>buttonResetDefines</tabstop>
+  <tabstop>editUndefines</tabstop>
+  <tabstop>buttonResetUndefines</tabstop>
+  <tabstop>checkFullSymbolicDebug</tabstop>
+  <tabstop>buttonResetFullSymbolicDebug</tabstop>
+  <tabstop>checkDataAccessModel</tabstop>
+  <tabstop>editDataAccessModel</tabstop>
+  <tabstop>buttonResetDataAccessModel</tabstop>
+  <tabstop>checkMh</tabstop>
+  <tabstop>editMh</tabstop>
+  <tabstop>buttonResetMh</tabstop>
+  <tabstop>checkMi</tabstop>
+  <tabstop>editMi</tabstop>
+  <tabstop>buttonResetMi</tabstop>
+  <tabstop>checkMv</tabstop>
+  <tabstop>editMv</tabstop>
+  <tabstop>buttonResetMv</tabstop>
+  <tabstop>checkOptimizationLevel</tabstop>
+  <tabstop>editOptimizationLevel</tabstop>
+  <tabstop>buttonResetOptimizationLevel</tabstop>
+  <tabstop>checkOptimizationType</tabstop>
+  <tabstop>editOptimizationType</tabstop>
+  <tabstop>buttonResetOptimizationType</tabstop>
+  <tabstop>editOtherOptions</tabstop>
+  <tabstop>buttonResetOtherOptions</tabstop>
+  <tabstop>buttonResetAll</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>620</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>327</x>
+     <y>620</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkDataAccessModel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editDataAccessModel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>99</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>262</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMh</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editMh</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>127</x>
+     <y>305</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>246</x>
+     <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMi</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editMi</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>88</x>
+     <y>343</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>341</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMv</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editMv</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>118</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>304</x>
+     <y>389</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkOptimizationLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editOptimizationLevel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>301</x>
+     <y>419</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkOptimizationType</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>editOptimizationType</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>456</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>360</x>
+     <y>461</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetIncludePaths</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>646</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>786</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetDefines</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>634</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>731</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetUndefines</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>643</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>802</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetFullSymbolicDebug</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>229</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>790</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetDataAccessModel</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>639</x>
+     <y>269</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>828</x>
+     <y>269</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetMh</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>643</x>
+     <y>306</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>839</x>
+     <y>321</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetMi</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>651</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>881</x>
+     <y>364</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetMv</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>643</x>
+     <y>373</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>793</x>
+     <y>379</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetOptimizationLevel</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>641</x>
+     <y>422</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>745</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetOptimizationType</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>648</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>802</x>
+     <y>458</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetOtherOptions</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>650</x>
+     <y>503</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>780</x>
+     <y>508</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonResetAll</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>resetValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>542</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>770</x>
+     <y>550</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkFullSymbolicDebug</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-2</x>
+     <y>227</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkDataAccessModel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>41</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-12</x>
+     <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMh</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>310</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-25</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMi</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-22</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkMv</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>64</x>
+     <y>377</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-44</x>
+     <y>376</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkOptimizationLevel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-50</x>
+     <y>414</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkOptimizationType</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>461</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-30</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDataAccessModel</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>857</x>
+     <y>247</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editMv</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>528</x>
+     <y>379</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>968</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editOptimizationLevel</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>572</x>
+     <y>420</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>881</x>
+     <y>420</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editOptimizationType</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>528</x>
+     <y>464</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>892</x>
+     <y>471</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editOtherOptions</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>495</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1150</x>
+     <y>492</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editUndefines</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>521</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1003</x>
+     <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editDefines</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>538</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>965</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editIncludePaths</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>532</x>
+     <y>102</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1071</x>
+     <y>100</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editMh</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>309</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1022</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>editMi</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>DialogFileOptions</receiver>
+   <slot>checkValues()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>466</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1048</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>resetValue()</slot>
+  <slot>checkValues()</slot>
+ </slots>
+</ui>

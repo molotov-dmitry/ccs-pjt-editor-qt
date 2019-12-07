@@ -16,6 +16,7 @@
 
 #include "dialogconfigurationrename.h"
 #include "dialoglinkordereditor.h"
+#include "dialogfileoptions.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -1553,3 +1554,21 @@ void MainWindow::checkProjectChanged()
     ui->boxProjects->setItemIcon(currentIndex, statusIcon);
 }
 
+
+void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    if ((item == nullptr) ||
+        (mCurrentProject == nullptr) ||
+        (mCurrentConfig == nullptr))
+    {
+        return;
+    }
+
+    std::string filePath = item->text(0).toStdString();
+
+    DialogFileOptions dialog(*mCurrentConfig,
+                             mCurrentConfig->fileOptions(filePath),
+                             this);
+
+    dialog.exec();
+}

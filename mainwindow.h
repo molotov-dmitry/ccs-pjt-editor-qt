@@ -12,6 +12,7 @@ class MainWindow;
 }
 
 class QTextCodec;
+class QTreeWidgetItem;
 
 class MainWindow : public QMainWindow
 {
@@ -68,6 +69,8 @@ private slots:
     void on_buttonLinkerMapFileExtra_clicked();
 
     void checkProjectChanged();
+
+    void on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 private:
     Ui::MainWindow *ui;
