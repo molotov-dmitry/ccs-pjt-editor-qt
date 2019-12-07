@@ -3,6 +3,7 @@
 
 #include <QFontDatabase>
 #include <QComboBox>
+#include <QTextCodec>
 
 #include "buildstepconditiondelegate.h"
 
@@ -67,6 +68,14 @@ void BuildStepsList::addBuildStep(const QString &command, int condition)
     item->setData(0, Qt::DisplayRole, BuildStepConditionDelegate::buildStepConditionString(condition, isFile()));
 
     ui->tree->addTopLevelItem(item);
+}
+
+void BuildStepsList::addBuildStep(const BuildStep& command)
+{
+    QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
+
+    addBuildStep(codec->toUnicode(command.command().c_str()),
+                 command.condition());
 }
 
 QList<QPair<QString, int> > BuildStepsList::buildSteps() const

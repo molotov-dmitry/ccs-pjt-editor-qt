@@ -6,6 +6,9 @@
 #include <QList>
 #include <QPair>
 
+
+#include "parser/buildstep.h"
+
 class QTreeWidgetItem;
 
 namespace Ui {
@@ -27,6 +30,7 @@ public:
 
     void clear();
     void addBuildStep(const QString& command, int condition);
+    void addBuildStep(const BuildStep& command);
 
     QList< QPair<QString, int> > buildSteps() const;
 
