@@ -347,43 +347,43 @@ void DialogFileOptions::checkValues()
 {
     bool enabled = false;
 
-    enabled = ui->editIncludePaths->text() != mDefaultIncludePaths;
+    enabled = (ui->editIncludePaths->text() != mDefaultIncludePaths);
     ui->buttonResetIncludePaths->setEnabled(enabled);
 
-    enabled = ui->editDefines->text() != mDefaultDefines;
+    enabled = (ui->editDefines->text() != mDefaultDefines);
     ui->buttonResetDefines->setEnabled(enabled);
 
-    enabled = ui->editUndefines->text() != mDefaultUndefines;
+    enabled = (ui->editUndefines->text() != mDefaultUndefines);
     ui->buttonResetUndefines->setEnabled(enabled);
 
-    enabled = ui->checkFullSymbolicDebug->isChecked() != mDefaultEnabledDebug;
+    enabled = (ui->checkFullSymbolicDebug->isChecked() != mDefaultEnabledDebug);
     ui->buttonResetFullSymbolicDebug->setEnabled(enabled);
 
-    enabled = ui->checkDataAccessModel->isChecked() != mDefaultEnabledDataAccessModel;
-    enabled |= ui->editDataAccessModel->currentText() != mDefaultDataAccessModel;
+    enabled = (ui->checkDataAccessModel->isChecked() != mDefaultEnabledDataAccessModel) ||
+              (ui->editDataAccessModel->currentText() != mDefaultDataAccessModel);
     ui->buttonResetDataAccessModel->setEnabled(enabled);
 
-    enabled = ui->checkMh->isChecked() != mDefaultEnabledMh;
-    enabled |= ui->editMh->value() != mDefaultMh;
+    enabled = (ui->checkMh->isChecked() != mDefaultEnabledMh) ||
+              (ui->editMh->value() != mDefaultMh);
     ui->buttonResetMh->setEnabled(enabled);
 
-    enabled = ui->checkMi->isChecked() != mDefaultEnabledMi;
-    enabled |= ui->editMi->value() != mDefaultMi;
+    enabled = (ui->checkMi->isChecked() != mDefaultEnabledMi) ||
+              (ui->editMi->value() != mDefaultMi);
     ui->buttonResetMi->setEnabled(enabled);
 
-    enabled = ui->checkMv->isChecked() != mDefaultEnabledMv;
-    enabled |= ui->editMv->currentText() != mDefaultMv;
+    enabled = (ui->checkMv->isChecked() != mDefaultEnabledMv) ||
+              (ui->editMv->currentText() != mDefaultMv);
     ui->buttonResetMv->setEnabled(enabled);
 
-    enabled = ui->checkOptimizationLevel->isChecked() != mDefaultEnabledOptimizationLevel;
-    enabled |= ui->editOptimizationLevel->currentIndex() != mDefaultOptimizationLevel;
+    enabled = (ui->checkOptimizationLevel->isChecked() != mDefaultEnabledOptimizationLevel) ||
+              (ui->editOptimizationLevel->currentIndex() != mDefaultOptimizationLevel);
     ui->buttonResetOptimizationLevel->setEnabled(enabled);
 
-    enabled = ui->checkOptimizationType->isChecked() != mDefaultEnabledOptimizationType;
-    enabled |= ui->editOptimizationType->value() != mDefaultOptimizationType;
+    enabled = (ui->checkOptimizationType->isChecked() != mDefaultEnabledOptimizationType) ||
+              (ui->editOptimizationType->value() != mDefaultOptimizationType);
     ui->buttonResetOptimizationType->setEnabled(enabled);
 
-    enabled = ui->editOtherOptions->text() != mDefaultOtherOptions;
+    enabled = (ui->editOtherOptions->text() != mDefaultOtherOptions);
     ui->buttonResetOtherOptions->setEnabled(enabled);
 }
 
