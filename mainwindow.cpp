@@ -863,14 +863,7 @@ void MainWindow::on_widgetPreBuildSteps_updated()
         return;
     }
 
-    mCurrentConfig->preBuildStepsRef().clear();
-
-    foreach (const auto& step, ui->widgetPreBuildSteps->buildSteps())
-    {   
-        std::string cmd = mProjectCodec->fromUnicode(step.first).toStdString();
-
-        mCurrentConfig->preBuildStepsRef().add(cmd, step.second);
-    }
+    mCurrentConfig->preBuildStepsRef() = ui->widgetPreBuildSteps->buildStepList();
 
     checkProjectChanged();
 }
@@ -887,14 +880,7 @@ void MainWindow::on_widgetPostBuildSteps_updated()
         return;
     }
 
-    mCurrentConfig->postBuildStepsRef().clear();
-
-    foreach (const auto& step, ui->widgetPostBuildSteps->buildSteps())
-    {
-        std::string cmd = mProjectCodec->fromUnicode(step.first).toStdString();
-
-        mCurrentConfig->postBuildStepsRef().add(cmd, step.second);
-    }
+    mCurrentConfig->postBuildStepsRef() = ui->widgetPostBuildSteps->buildStepList();
 
     checkProjectChanged();
 }
@@ -1135,17 +1121,9 @@ void MainWindow::reloadProjectSettings()
 
     //// Build steps -----------------------------------------------------------
 
-    for (const BuildStep& step : configSettings.preBuildSteps())
-    {
-        ui->widgetPreBuildSteps->addBuildStep(mProjectCodec->toUnicode(step.command().c_str()),
-                                              step.condition());
-    }
+    ui->widgetPreBuildSteps->setBuildSteps(configSettings.preBuildStepsRef());
 
-    for (const BuildStep& step : configSettings.postBuildSteps())
-    {
-        ui->widgetPostBuildSteps->addBuildStep(mProjectCodec->toUnicode(step.command().c_str()),
-                                               step.condition());
-    }
+    ui->widgetPostBuildSteps->setBuildSteps(configSettings.postBuildStepsRef());
 
     //// Compiler --------------------------------------------------------------
 

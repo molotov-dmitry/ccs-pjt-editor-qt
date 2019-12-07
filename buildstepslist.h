@@ -7,9 +7,10 @@
 #include <QPair>
 
 
-#include "parser/buildstep.h"
+#include "parser/buildsteplist.h"
 
 class QTreeWidgetItem;
+class QTextCodec;
 
 namespace Ui {
 class BuildStepsList;
@@ -31,6 +32,11 @@ public:
     void clear();
     void addBuildStep(const QString& command, int condition);
     void addBuildStep(const BuildStep& command);
+    void addBuildSteps(const BuildStepList& list);
+
+    void setBuildSteps(const BuildStepList& list);
+
+    BuildStepList buildStepList() const;
 
     QList< QPair<QString, int> > buildSteps() const;
 
@@ -43,6 +49,7 @@ private:
     Ui::BuildStepsList *ui;
 
     BuildStepConditionDelegate* mDelegate;
+    QTextCodec* mCodec;
 
     static QIcon commandIcon(const QString& command);
 

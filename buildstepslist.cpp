@@ -12,7 +12,8 @@
 BuildStepsList::BuildStepsList(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::BuildStepsList),
-    mDelegate(nullptr)
+    mDelegate(nullptr),
+    mCodec(QTextCodec::codecForName("Windows-1251"))
 {
     ui->setupUi(this);
 
@@ -72,10 +73,37 @@ void BuildStepsList::addBuildStep(const QString &command, int condition)
 
 void BuildStepsList::addBuildStep(const BuildStep& command)
 {
-    QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
-
-    addBuildStep(codec->toUnicode(command.command().c_str()),
+    addBuildStep(mCodec->toUnicode(command.command().c_str()),
                  command.condition());
+}
+
+void BuildStepsList::addBuildSteps(const BuildStepList& list)
+{
+    for (const BuildStep& step : list.get())
+    {
+        addBuildStep(step);
+    }
+}
+
+void BuildStepsList::setBuildSteps(const BuildStepList& list)
+{
+    clear();
+    addBuildSteps(list);
+}
+
+BuildStepList BuildStepsList::buildStepList() const
+{
+    BuildStepList result;
+
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem* item = ui->tree->topLevelItem(i);
+
+        result.add(mCodec->fromUnicode(item->text(1)).toStdString(),
+                   item->data(0, Qt::UserRole + 1).toInt());
+    }
+
+    return result;
 }
 
 QList<QPair<QString, int> > BuildStepsList::buildSteps() const

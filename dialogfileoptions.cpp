@@ -323,17 +323,11 @@ DialogFileOptions::DialogFileOptions(const ConfigSettings& config, const FileOpt
 
     //// Add pre build steps ===================================================
 
-    for (const BuildStep& step : fileOptions.preBuildSteps().get())
-    {
-        ui->widgetPreBuildSteps->addBuildStep(step);
-    }
+    ui->widgetPreBuildSteps->setBuildSteps(fileOptions.preBuildSteps());
 
     //// Add post build steps ==================================================
 
-    for (const BuildStep& step : fileOptions.postBuildSteps().get())
-    {
-        ui->widgetPostBuildSteps->addBuildStep(step);
-    }
+    ui->widgetPostBuildSteps->setBuildSteps(fileOptions.postBuildSteps());
 
 }
 
