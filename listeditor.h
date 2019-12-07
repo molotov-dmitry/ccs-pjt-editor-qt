@@ -21,6 +21,9 @@ public:
     QStringList items() const;
     void setItems(const QStringList& items);
 
+    void addItem(const QString& item, bool insertMulti = false);
+    void removeItem(const QString& item);
+
     void clear();
 
     void setDragEnabled(bool enabled);

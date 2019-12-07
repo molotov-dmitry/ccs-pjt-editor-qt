@@ -43,6 +43,28 @@ void ListEditor::setItems(const QStringList& items)
     setText(items.join(mSeparator));
 }
 
+void ListEditor::addItem(const QString& item, bool insertMulti)
+{
+    QStringList itemList = items();
+
+    if (insertMulti || not itemList.contains(item))
+    {
+        itemList.append(item);
+        setItems(itemList);
+    }
+}
+
+void ListEditor::removeItem(const QString& item)
+{
+    QStringList itemList = items();
+
+    if (itemList.contains(item))
+    {
+        itemList.removeAll(item);
+        setItems(itemList);
+    }
+}
+
 void ListEditor::clear()
 {
     ui->edit->clear();
