@@ -13,6 +13,7 @@ ListEditor::ListEditor(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->edit, SIGNAL(textChanged(QString)), this, SIGNAL(listUpdated()));
+    connect(ui->edit, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
 
     ui->edit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 }

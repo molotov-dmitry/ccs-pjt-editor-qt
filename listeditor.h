@@ -41,6 +41,7 @@ public:
 signals:
 
     void listUpdated();
+    void textChanged(QString);
 
 private slots:
     void on_buttonEditAsList_clicked();
