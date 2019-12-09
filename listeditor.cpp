@@ -35,6 +35,11 @@ QString ListEditor::text() const
 
 QStringList ListEditor::items() const
 {
+    if (text().isEmpty())
+    {
+        return QStringList();
+    }
+
     return text().split(mSeparator);
 }
 
