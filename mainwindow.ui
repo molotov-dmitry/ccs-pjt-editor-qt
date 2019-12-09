@@ -609,7 +609,7 @@
             <string>Specify speculative load byte count threshold</string>
            </property>
            <property name="text">
-            <string>mh:</string>
+            <string>Speculate threshold:</string>
            </property>
           </widget>
          </item>
@@ -626,7 +626,7 @@
             <string>Specify maximum cycles that interrupts may be disabled</string>
            </property>
            <property name="text">
-            <string>mi:</string>
+            <string>Interrupt threshold:</string>
            </property>
           </widget>
          </item>
@@ -643,7 +643,7 @@
             <string>Target processor version</string>
            </property>
            <property name="text">
-            <string>mv:</string>
+            <string>Target processor:</string>
            </property>
           </widget>
          </item>
@@ -709,7 +709,7 @@
          <item row="10" column="0">
           <widget class="QCheckBox" name="checkCompilerOptimizationType">
            <property name="text">
-            <string>Optimize by:</string>
+            <string>Optimize for:</string>
            </property>
           </widget>
          </item>
