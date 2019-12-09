@@ -1532,10 +1532,12 @@ void MainWindow::checkProjectChanged()
     ui->boxProjects->setItemIcon(currentIndex, statusIcon);
 }
 
-
 void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
+    Q_UNUSED(column);
+
     if ((item == nullptr) ||
+        (item->parent() == nullptr) ||
         (mCurrentProject == nullptr) ||
         (mCurrentConfig == nullptr))
     {
