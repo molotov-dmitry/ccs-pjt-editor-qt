@@ -151,7 +151,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>429</width>
+          <width>416</width>
           <height>532</height>
          </rect>
         </property>
@@ -180,6 +180,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QComboBox" name="boxProjectType">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <item>
             <property name="text">
              <string>&lt;Unset&gt;</string>
@@ -206,6 +212,12 @@
          </item>
          <item row="1" column="1">
           <widget class="QComboBox" name="editCpuFamily">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="editable">
             <bool>true</bool>
            </property>
@@ -251,7 +263,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>429</width>
+          <width>416</width>
           <height>532</height>
          </rect>
         </property>
@@ -326,7 +338,7 @@
               </size>
              </property>
              <property name="icon">
-              <iconset theme="edit-rename">
+              <iconset theme="edit">
                <normaloff>.</normaloff>.</iconset>
              </property>
             </widget>
@@ -380,7 +392,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>429</width>
+          <width>416</width>
           <height>532</height>
          </rect>
         </property>
@@ -402,6 +414,12 @@
          </property>
          <item>
           <widget class="QTreeWidget" name="treeSources">
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
            <property name="headerHidden">
             <bool>true</bool>
            </property>
@@ -528,6 +546,12 @@
          </item>
          <item row="0" column="1">
           <widget class="ListEditor" name="editCompilerIncludePaths">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="placeholderText">
             <string>Include paths</string>
            </property>
@@ -542,6 +566,12 @@
          </item>
          <item row="1" column="1">
           <widget class="ListEditor" name="editCompilerDefines">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="placeholderText">
             <string>Defined names</string>
            </property>
@@ -556,6 +586,12 @@
          </item>
          <item row="2" column="1">
           <widget class="ListEditor" name="editCompilerUndefines">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="placeholderText">
             <string>Undefined names</string>
            </property>
@@ -582,6 +618,12 @@
           <widget class="QComboBox" name="editCompilerDataAccessModel">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -618,6 +660,12 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item row="7" column="0">
@@ -635,6 +683,12 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item row="8" column="0">
@@ -651,6 +705,12 @@
           <widget class="QComboBox" name="editMv">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
            </property>
            <property name="editable">
             <bool>true</bool>
@@ -683,6 +743,12 @@
           <widget class="QComboBox" name="boxCompilerOptimizationLevel">
            <property name="enabled">
             <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
            </property>
            <item>
             <property name="text">
@@ -727,6 +793,12 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="maximum">
               <number>3</number>
              </property>
@@ -759,8 +831,24 @@
          </item>
          <item row="11" column="1">
           <widget class="ListEditor" name="editCompilerOtherOptions">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="placeholderText">
             <string>Other compiler options</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QWidget" name="widget" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -945,6 +1033,46 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="1">
+          <widget class="QWidget" name="widget_2" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QWidget" name="widget_3" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QWidget" name="widget_4" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QWidget" name="widget_5" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="tab_5">
@@ -961,6 +1089,12 @@
          </item>
          <item row="0" column="1">
           <widget class="ListEditor" name="editArchiverOtherOptions">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="placeholderText">
             <string>Other archiver options</string>
            </property>

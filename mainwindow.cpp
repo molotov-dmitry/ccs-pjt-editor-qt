@@ -1431,7 +1431,7 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
 
     DialogLinkOrderEditor dialog;
 
-    for (const std::string& src : mCurrentProject->sources())
+    for (const std::string& src : mCurrentProject->files())
     {
         dialog.addUnordered(QString::fromStdString(src));
     }
@@ -1564,5 +1564,7 @@ void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int col
         }
 
         item->setFont(0, font);
+
+        checkProjectChanged();
     }
 }

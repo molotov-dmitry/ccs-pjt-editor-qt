@@ -51,7 +51,7 @@
       </size>
      </property>
      <property name="icon">
-      <iconset theme="document-edit">
+      <iconset theme="edit">
        <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
