@@ -1555,5 +1555,14 @@ void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int col
     if (dialog.exec() == QDialog::Accepted)
     {
         fileOptions = dialog.getFileOptions();
+
+        QFont font = ui->treeSources->font();
+
+        if (not fileOptions.isDefault())
+        {
+            font.setBold(true);
+        }
+
+        item->setFont(0, font);
     }
 }
