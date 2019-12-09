@@ -1,6 +1,8 @@
 #include "dialogfileoptions.h"
 #include "ui_dialogfileoptions.h"
 
+#include <QTextCodec>
+
 #include "parser/utils.h"
 
 static bool isConfig(const std::string& line, const std::string& option, QString& value)
@@ -61,7 +63,8 @@ DialogFileOptions::DialogFileOptions(const ConfigSettings& config, const FileOpt
     mDefaultMh(0),
     mDefaultMi(0),
     mDefaultOptimizationLevel(0),
-    mDefaultOptimizationType(0)
+    mDefaultOptimizationType(0),
+    mLinkOrder(fileOptions.linkOrder())
 {
     ui->setupUi(this);
 
@@ -258,6 +261,7 @@ DialogFileOptions::DialogFileOptions(const ConfigSettings& config, const FileOpt
         }
         else
         {
+            value = QString::fromStdString(option);
             ui->editOtherOptions->removeItem(value);
         }
     }
@@ -317,6 +321,7 @@ DialogFileOptions::DialogFileOptions(const ConfigSettings& config, const FileOpt
         }
         else
         {
+            value = QString::fromStdString(option);
             ui->editOtherOptions->addItem(value);
         }
     }
@@ -334,6 +339,204 @@ DialogFileOptions::DialogFileOptions(const ConfigSettings& config, const FileOpt
 DialogFileOptions::~DialogFileOptions()
 {
     delete ui;
+}
+
+static void getDifference(const ListEditor* newValuesList,
+                          const QString& defaultValues,
+                          FileOptions& fileOptions,
+                          const QString& prefix = QString(),
+                          const QString& suffix = QString())
+{
+    QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
+
+    QChar sep = newValuesList->separator();
+
+    QStringList nl = newValuesList->items();
+    QStringList ol = defaultValues.split(sep);
+
+    foreach (const QString& o, ol)
+    {
+        if (not nl.contains(o))
+        {
+            QString rv = prefix + o + suffix;
+            fileOptions.addOptionRemoved(codec->fromUnicode(rv).toStdString());
+        }
+    }
+
+    foreach (const QString& n, nl)
+    {
+        if (not ol.contains(n))
+        {
+            QString av = prefix + n + suffix;
+            fileOptions.addOptionAdded(codec->fromUnicode(av).toStdString());
+        }
+    }
+}
+
+static void getDifference(QString option,
+                          bool wasChecked,
+                          bool isChecked,
+                          QString oldValue,
+                          QString newValue,
+                          FileOptions& fileOptions)
+{
+    QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
+
+    if ((wasChecked != isChecked) || (isChecked && (oldValue != newValue)))
+    {
+        if (wasChecked)
+        {
+            QString rv = option + oldValue;
+            fileOptions.addOptionRemoved(codec->fromUnicode(rv).toStdString());
+        }
+
+        if (isChecked)
+        {
+            QString av = option + newValue;
+            fileOptions.addOptionAdded(codec->fromUnicode(av).toStdString());
+        }
+    }
+
+}
+
+static void getDifference(QString option,
+                          bool wasChecked,
+                          bool isChecked,
+                          int oldValue,
+                          int newValue,
+                          FileOptions& fileOptions)
+{
+    getDifference(option, wasChecked, isChecked,
+                  QString::number(oldValue), QString::number(newValue),
+                  fileOptions);
+}
+
+FileOptions DialogFileOptions::getFileOptions()
+{
+    FileOptions result;
+
+    //// Set general options ===================================================
+
+    result.setExcludeFromBuild(ui->checkExcludeFromBuild->isChecked());
+
+    if (mLinkOrder >= 0)
+    {
+        result.setLinkOrder((uint)mLinkOrder);
+    }
+
+    result.preBuildSteps() = ui->widgetPreBuildSteps->buildStepList();
+    result.postBuildSteps() = ui->widgetPostBuildSteps->buildStepList();
+
+    //// Set compiler options ==================================================
+
+    bool changed = false;
+
+    //// Include paths ---------------------------------------------------------
+
+    changed = (ui->editIncludePaths->text() != mDefaultIncludePaths);
+    if (changed)
+    {
+        getDifference(ui->editIncludePaths,
+                      mDefaultIncludePaths,
+                      result,
+                      "-i\"", "\"");
+    }
+
+    //// Defines ---------------------------------------------------------------
+
+    changed = (ui->editDefines->text() != mDefaultDefines);
+    if (changed)
+    {
+        getDifference(ui->editDefines,
+                      mDefaultDefines,
+                      result,
+                      "-d\"", "\"");
+    }
+
+    //// Undefines -------------------------------------------------------------
+
+    changed = (ui->editUndefines->text() != mDefaultUndefines);
+    if (changed)
+    {
+        getDifference(ui->editUndefines, mDefaultUndefines,
+                      result,
+                      "-u\"", "\"");
+    }
+
+    //// Full symbolic debug ---------------------------------------------------
+
+    getDifference("-g",
+                  mDefaultEnabledDebug,
+                  ui->checkFullSymbolicDebug->isChecked(),
+                  QString(),
+                  QString(),
+                  result);
+
+    //// Data access model -----------------------------------------------------
+
+    getDifference("--mem_model:data=",
+                  mDefaultEnabledDataAccessModel,
+                  ui->checkDataAccessModel->isChecked(),
+                  mDefaultDataAccessModel,
+                  ui->editDataAccessModel->currentText(),
+                  result);
+
+    //// Mh --------------------------------------------------------------------
+
+    getDifference("-mh",
+                  mDefaultEnabledMh,
+                  ui->checkMh->isChecked(),
+                  mDefaultMh,
+                  ui->editMh->value(),
+                  result);
+
+    //// Mi --------------------------------------------------------------------
+
+    getDifference("-mi",
+                  mDefaultEnabledMi,
+                  ui->checkMi->isChecked(),
+                  mDefaultMi,
+                  ui->editMi->value(),
+                  result);
+
+    //// Mv --------------------------------------------------------------------
+
+    getDifference("-mv",
+                  mDefaultEnabledMv,
+                  ui->checkMv->isChecked(),
+                  mDefaultMv,
+                  ui->editMv->currentText(),
+                  result);
+
+    //// Optimization level ----------------------------------------------------
+
+    getDifference("-o",
+                  mDefaultEnabledOptimizationLevel,
+                  ui->checkOptimizationLevel->isChecked(),
+                  mDefaultOptimizationLevel,
+                  ui->editOptimizationLevel->currentIndex(),
+                  result);
+
+    //// Optimization type -----------------------------------------------------
+
+    getDifference("-ms",
+                  mDefaultEnabledOptimizationType,
+                  ui->checkOptimizationType->isChecked(),
+                  mDefaultOptimizationType,
+                  ui->editOptimizationType->value(),
+                  result);
+
+    //// Other options ---------------------------------------------------------
+
+    changed = (ui->editOtherOptions->text() != mDefaultOtherOptions);
+    if (changed)
+    {
+        getDifference(ui->editOtherOptions, mDefaultOtherOptions, result);
+    }
+
+    //// =======================================================================
+
+    return result;
 }
 
 void DialogFileOptions::resetValue()

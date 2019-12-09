@@ -1544,9 +1544,14 @@ void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int col
 
     std::string filePath = item->text(0).toStdString();
 
+    FileOptions& fileOptions = mCurrentConfig->file(filePath);
+
     DialogFileOptions dialog(*mCurrentConfig,
-                             mCurrentConfig->fileOptions(filePath),
+                             fileOptions,
                              this);
 
-    dialog.exec();
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        fileOptions = dialog.getFileOptions();
+    }
 }

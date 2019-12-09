@@ -20,6 +20,8 @@ public:
 
     ~DialogFileOptions();
 
+    FileOptions getFileOptions();
+
 public slots:
 
     void resetValue();
@@ -69,6 +71,8 @@ private:
     int mDefaultOptimizationLevel;
     int mDefaultOptimizationType;
     QString mDefaultOtherOptions;
+
+    int mLinkOrder;
 
     void resetValue(int flags);
 };
