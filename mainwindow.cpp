@@ -1377,7 +1377,8 @@ void MainWindow::updateSources()
 
             if (mCurrentConfig != nullptr)
             {
-                updateSource(item, &mCurrentConfig->file(source));
+                FileOptions options = mCurrentConfig->fileOptions(source);
+                updateSource(item, &options);
             }
             else
             {
