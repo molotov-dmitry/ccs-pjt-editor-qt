@@ -105,6 +105,7 @@ private:
     void updateToolsTabs();
     void updateWindowTitle();
 
+    void updateSource(QTreeWidgetItem* item, const FileOptions* options);
     void updateSources();
     void reloadSources();
 };

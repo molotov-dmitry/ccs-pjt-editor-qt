@@ -1335,6 +1335,29 @@ void MainWindow::updateWindowTitle()
     this->setWindowTitle(title);
 }
 
+void MainWindow::updateSource(QTreeWidgetItem* item, const FileOptions* options)
+{
+    if (item == nullptr)
+    {
+        return;
+    }
+
+    if (options != nullptr)
+    {
+        QFont font = ui->treeSources->font();
+
+        if (options != nullptr)
+        {
+            if (not options->isDefault(false, false))
+            {
+                font.setBold(true);
+            }
+        }
+
+        item->setFont(0, font);
+    }
+}
+
 void MainWindow::updateSources()
 {
     for (int i = 0; i < ui->treeSources->topLevelItemCount(); ++i)
@@ -1347,17 +1370,14 @@ void MainWindow::updateSources()
 
             std::string source = item->text(0).toStdString();
 
-            QFont font = ui->treeSources->font();
-
             if (mCurrentConfig != nullptr)
             {
-                if (not mCurrentConfig->fileOptions(source).isDefault(false))
-                {
-                    font.setBold(true);
-                }
+                updateSource(item, &mCurrentConfig->file(source));
             }
-
-            item->setFont(0, font);
+            else
+            {
+                updateSource(item, nullptr);
+            }
         }
     }
 }
@@ -1556,14 +1576,7 @@ void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int col
     {
         fileOptions = dialog.getFileOptions();
 
-        QFont font = ui->treeSources->font();
-
-        if (not fileOptions.isDefault())
-        {
-            font.setBold(true);
-        }
-
-        item->setFont(0, font);
+        updateSource(item, &fileOptions);
 
         checkProjectChanged();
     }
