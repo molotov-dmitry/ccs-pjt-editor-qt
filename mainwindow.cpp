@@ -1352,6 +1352,11 @@ void MainWindow::updateSource(QTreeWidgetItem* item, const FileOptions* options)
             {
                 font.setBold(true);
             }
+
+            if (options->isExcludedFromBuild())
+            {
+                font.setStrikeOut(true);
+            }
         }
 
         item->setFont(0, font);
