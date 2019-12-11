@@ -1398,6 +1398,13 @@ void MainWindow::reloadSources()
         return;
     }
 
+    QDir projectDir;
+    {
+        int currentIndex = ui->boxProjects->currentIndex();
+        QFileInfo fileInfo(mProjectPaths[currentIndex]);
+        projectDir = fileInfo.absoluteDir();
+    }
+
     QList< QPair<QString, stringset> > sources;
 
     sources << qMakePair(QString("Sources"),   mCurrentProject->sources());
@@ -1419,11 +1426,24 @@ void MainWindow::reloadSources()
             {
                 QTreeWidgetItem* item = new QTreeWidgetItem();
 
-                QString name = mProjectCodec->toUnicode(source.c_str());
-                QMimeType type = mimeDatabase.mimeTypeForFile(name);
+                QString   name = mProjectCodec->toUnicode(source.c_str());
+
+
+                QString   path = projectDir.absoluteFilePath(name);
+
+                QFileInfo info(path);
+
+                if (info.exists())
+                {
+                    QMimeType type = mimeDatabase.mimeTypeForFile(info);
+                    item->setIcon(0, QIcon::fromTheme(type.iconName()));
+                }
+                else
+                {
+                    item->setIcon(0, QIcon::fromTheme("dialog-warning"));
+                }
 
                 item->setText(0, name);
-                item->setIcon(0, QIcon::fromTheme(type.iconName()));
 
                 root->addChild(item);
             }
