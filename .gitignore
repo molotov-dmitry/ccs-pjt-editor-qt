@@ -1,5 +1,5 @@
-*.pro.user*
+/*.pro.user*
 /build
-.qmake.stash
-ccs-pjt-editor-qt
-Makefile
+/.qmake.stash
+/ccs-pjt-editor-qt
+/Makefile
