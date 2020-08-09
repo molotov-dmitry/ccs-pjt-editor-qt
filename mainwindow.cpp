@@ -626,11 +626,14 @@ void MainWindow::on_buttonReplaceSource_clicked()
             continue;
         }
 
-        std::string oldsource = item->text(0).toStdString();
+        QString oldFileName = item->text(0);
+        QString oldFilePath = projectDir.absoluteFilePath(oldFileName);
+
+        std::string oldsource = oldFileName.toStdString();
 
         QString path = QFileDialog::getOpenFileName(this,
                                                     QString::fromUtf8("Заменить файл"),
-                                                    QString(),
+                                                    oldFilePath,
                                                     QString("*"));
 
         if (path.isEmpty())
