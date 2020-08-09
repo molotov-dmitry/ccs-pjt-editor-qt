@@ -538,20 +538,23 @@ void MainWindow::on_buttonAddSource_clicked()
         return;
     }
 
+    QDir projectDir;
+    {
+        QFileInfo fileInfo(mProjectPaths[currentIndex]);
+        projectDir = fileInfo.absoluteDir();
+    }
+
     ProjectSettings& project = mProjects[currentIndex];
 
     QStringList path = QFileDialog::getOpenFileNames(this,
                                                      QString::fromUtf8("Добавить файлы"),
-                                                     QString(),
+                                                     projectDir.absolutePath(),
                                                      QString("*"));
 
     if (path.isEmpty())
     {
         return;
     }
-
-    QFileInfo fileInfo(mProjectPaths[currentIndex]);
-    QDir projectDir = fileInfo.absoluteDir();
 
     foreach (const QString& source, path)
     {
