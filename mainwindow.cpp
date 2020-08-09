@@ -295,7 +295,7 @@ void MainWindow::on_action_save_all_triggered()
 
 void MainWindow::on_boxProjectType_currentIndexChanged(int index)
 {
-    Q_UNUSED(index);
+    Q_UNUSED(index)
 
     updateToolsTabs();
 }
@@ -1501,7 +1501,7 @@ void MainWindow::on_buttonLinkerEditLinkOrder_clicked()
         {
             QString str = newLinkOrder.at(i);
 
-            mCurrentConfig->file(str.toStdString()).setLinkOrder(i + 1);
+            mCurrentConfig->file(str.toStdString()).setLinkOrder((unsigned int)i + 1);
         }
 
         updateSources();
@@ -1580,7 +1580,7 @@ void MainWindow::checkProjectChanged()
 
 void MainWindow::on_treeSources_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-    Q_UNUSED(column);
+    Q_UNUSED(column)
 
     if ((item == nullptr) ||
         (item->parent() == nullptr) ||
