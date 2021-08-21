@@ -133,7 +133,7 @@ DialogFileOptions::DialogFileOptions(const ConfigSettings& config, const FileOpt
 
     QStringList otherOptions;
 
-    for (const std::string& option : config.compilerOptions())
+    for (const std::string& option : config.otherCompilerOptions())
     {
         QString value;
         int     intValue;

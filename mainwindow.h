@@ -55,9 +55,15 @@ private slots:
     void on_editCompilerDefines_listUpdated();
     void on_editCompilerUndefines_listUpdated();
 
+    void on_editLinkerLibraryPaths_listUpdated();
+    void on_editLinkerLibraries_listUpdated();
+
+    void updateOutputFile();
+    void updateMapFile();
+
     void updateOtherCompilerOptions();
-    void updateLinkerOptions();
-    void updateArchiverOptions();
+    void updateOtherLinkerOptions();
+    void updateOtherArchiverOptions();
 
     void on_widgetPreBuildSteps_updated();
     void on_widgetPostBuildSteps_updated();

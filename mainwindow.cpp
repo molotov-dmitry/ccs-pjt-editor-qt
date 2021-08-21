@@ -9,6 +9,7 @@
 #include <QMimeDatabase>
 #include <QFileIconProvider>
 #include <QShortcut>
+#include <QCloseEvent>
 
 #include "parser/projectreader.h"
 #include "parser/export/projectexportccs3.h"
@@ -57,19 +58,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->boxCompilerOptimizationLevel, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOtherCompilerOptions()));
     connect(ui->editCompilerOptimizationType, SIGNAL(valueChanged(int)), this, SLOT(updateOtherCompilerOptions()));
 
-    connect(ui->editLinkerOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateLinkerOptions()));
+    connect(ui->editLinkerOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateOtherLinkerOptions()));
 
-    connect(ui->checkLinkerAbsoluteExecutable, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
-    connect(ui->checkLinkerRomAutoinitModel, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
-    connect(ui->checkLinkerUnspecifiedSectionsWarning, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
-    connect(ui->checkLinkerRereadLibraries, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
-    connect(ui->checkLinkerOutputFile, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
-    connect(ui->checkLinkerMapFile, SIGNAL(toggled(bool)), this, SLOT(updateLinkerOptions()));
+    connect(ui->checkLinkerAbsoluteExecutable, SIGNAL(toggled(bool)), this, SLOT(updateOtherLinkerOptions()));
+    connect(ui->checkLinkerRomAutoinitModel, SIGNAL(toggled(bool)), this, SLOT(updateOtherLinkerOptions()));
+    connect(ui->checkLinkerUnspecifiedSectionsWarning, SIGNAL(toggled(bool)), this, SLOT(updateOtherLinkerOptions()));
+    connect(ui->checkLinkerRereadLibraries, SIGNAL(toggled(bool)), this, SLOT(updateOtherLinkerOptions()));
+    connect(ui->checkLinkerOutputFile, SIGNAL(toggled(bool)), this, SLOT(updateOutputFile()));
+    connect(ui->checkLinkerMapFile, SIGNAL(toggled(bool)), this, SLOT(updateMapFile()));
 
-    connect(ui->editLinkerOutputFile, SIGNAL(textChanged(QString)), this, SLOT(updateLinkerOptions()));
-    connect(ui->editLinkerMapFile, SIGNAL(textChanged(QString)), this, SLOT(updateLinkerOptions()));
+    connect(ui->editLinkerOutputFile, SIGNAL(textChanged(QString)), this, SLOT(updateOutputFile()));
+    connect(ui->editLinkerMapFile, SIGNAL(textChanged(QString)), this, SLOT(updateMapFile()));
 
-    connect(ui->editArchiverOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateArchiverOptions()));
+    connect(ui->editArchiverOtherOptions, SIGNAL(listUpdated()), this, SLOT(updateOtherArchiverOptions()));
 
     //// Shortcuts (because unused actions cannot be called using hotkeys) =====
 
@@ -712,6 +713,78 @@ void MainWindow::on_editCompilerUndefines_listUpdated()
     checkProjectChanged();
 }
 
+void MainWindow::on_editLinkerLibraryPaths_listUpdated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearLibraryPaths();
+
+    foreach (const QString& option, ui->editLinkerLibraryPaths->items())
+    {
+        mCurrentConfig->addLibraryPath(option.toStdString());
+    }
+
+    checkProjectChanged();
+}
+
+void MainWindow::on_editLinkerLibraries_listUpdated()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    mCurrentConfig->clearLibraries();
+
+    foreach (const QString& option, ui->editLinkerLibraries->items())
+    {
+        mCurrentConfig->addLibrary(option.toStdString());
+    }
+
+    checkProjectChanged();
+}
+
+void MainWindow::updateOutputFile()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    if (ui->checkLinkerOutputFile->isChecked())
+    {
+        mCurrentConfig->setOutputFile(ui->editLinkerOutputFile->text().toStdString());
+    }
+    else
+    {
+        mCurrentConfig->setOutputFile(std::string());
+    }
+
+    checkProjectChanged();
+}
+
+void MainWindow::updateMapFile()
+{
+    if (mCurrentConfig == nullptr)
+    {
+        return;
+    }
+
+    if (ui->checkLinkerMapFile->isChecked())
+    {
+        mCurrentConfig->setMapFile(ui->editLinkerMapFile->text().toStdString());
+    }
+    else
+    {
+        mCurrentConfig->setMapFile(std::string());
+    }
+
+    checkProjectChanged();
+}
+
 void MainWindow::updateOtherCompilerOptions()
 {
     if (mLoadingProject)
@@ -724,7 +797,7 @@ void MainWindow::updateOtherCompilerOptions()
         return;
     }
 
-    mCurrentConfig->clearCompilerOptions();
+    mCurrentConfig->clearOtherCompilerOptions();
 
     if (ui->checkFullSymbolicDebug->isChecked())
     {
@@ -781,7 +854,7 @@ void MainWindow::updateOtherCompilerOptions()
     checkProjectChanged();
 }
 
-void MainWindow::updateLinkerOptions()
+void MainWindow::updateOtherLinkerOptions()
 {
     if (mLoadingProject)
     {
@@ -793,7 +866,7 @@ void MainWindow::updateLinkerOptions()
         return;
     }
 
-    mCurrentConfig->clearLinkerOptions();
+    mCurrentConfig->clearOtherLinkerOptions();
 
     if (ui->checkLinkerAbsoluteExecutable->isChecked())
     {
@@ -835,7 +908,7 @@ void MainWindow::updateLinkerOptions()
     checkProjectChanged();
 }
 
-void MainWindow::updateArchiverOptions()
+void MainWindow::updateOtherArchiverOptions()
 {
     if (mLoadingProject)
     {
@@ -847,7 +920,7 @@ void MainWindow::updateArchiverOptions()
         return;
     }
 
-    mCurrentConfig->clearArchiverOptions();
+    mCurrentConfig->clearOtherArchiverOptions();
 
     foreach (const QString& option, ui->editArchiverOtherOptions->items())
     {
@@ -1169,7 +1242,7 @@ void MainWindow::reloadProjectSettings()
     {
         QStringList otherOptions;
 
-        for (const std::string& option : configSettings.compilerOptions())
+        for (const std::string& option : configSettings.otherCompilerOptions())
         {
             std::string value;
             int         intValue;
@@ -1224,9 +1297,45 @@ void MainWindow::reloadProjectSettings()
     //// Linker ----------------------------------------------------------------
 
     {
+        QString outputFile = mProjectCodec->toUnicode(configSettings.outputFile().c_str());
+
+        ui->checkLinkerOutputFile->setChecked(not outputFile.isEmpty());
+        ui->editLinkerOutputFile->setText(outputFile);
+    }
+
+    {
+        QString mapFile = mProjectCodec->toUnicode(configSettings.mapFile().c_str());
+
+        ui->checkLinkerMapFile->setChecked(not mapFile.isEmpty());
+        ui->editLinkerMapFile->setText(mapFile);
+    }
+
+    {
+        QStringList libraryPathsList;
+
+        for (const std::string& libraryPath : configSettings.libraryPaths())
+        {
+            libraryPathsList.append(mProjectCodec->toUnicode(libraryPath.c_str()));
+        }
+
+        ui->editLinkerLibraryPaths->setText(libraryPathsList.join(';'));
+    }
+
+    {
+        QStringList libraryList;
+
+        for (const std::string& library : configSettings.libraries())
+        {
+            libraryList.append(mProjectCodec->toUnicode(library.c_str()));
+        }
+
+        ui->editLinkerLibraries->setText(libraryList.join(';'));
+    }
+
+    {
         QStringList otherOptions;
 
-        for (const std::string& option : configSettings.linkerOptions())
+        for (const std::string& option : configSettings.otherLinkerOptions())
         {
             std::string value;
 
@@ -1246,18 +1355,6 @@ void MainWindow::reloadProjectSettings()
             {
                 ui->checkLinkerRereadLibraries->setChecked(true);
             }
-            else if (isConfig(option, "-o", value))
-            {
-                QString valueUnicode = mProjectCodec->toUnicode(value.c_str());
-                ui->checkLinkerOutputFile->setChecked(true);
-                ui->editLinkerOutputFile->setText(valueUnicode);
-            }
-            else if (isConfig(option, "-m", value))
-            {
-                QString valueUnicode = mProjectCodec->toUnicode(value.c_str());
-                ui->checkLinkerMapFile->setChecked(true);
-                ui->editLinkerMapFile->setText(valueUnicode);
-            }
             else
             {
                 otherOptions.append(mProjectCodec->toUnicode(option.c_str()));
@@ -1272,7 +1369,7 @@ void MainWindow::reloadProjectSettings()
     {
         QStringList otherOptions;
 
-        for (const std::string& option : configSettings.archiverOptions())
+        for (const std::string& option : configSettings.otherArchiverOptions())
         {
             {
                 otherOptions.append(mProjectCodec->toUnicode(option.c_str()));
